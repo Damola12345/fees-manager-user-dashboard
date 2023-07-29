@@ -1,0 +1,17 @@
+/* #button {
+    width: 200px;
+    height: 35px;
+    background-color: white;
+    border: 0.5px solid purple;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 35px;
+    transition: all .4s ease-in-out;
+    color: rgb(60, 7, 60);
+}
+
+#button:hover {
+    color: white;
+    background-color: rgb(60, 7, 60);
+    cursor: pointer;
+} */

@@ -1,0 +1,138 @@
+
+
+#login-page {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    transition: all .4s ease-in-out;
+}
+
+#loginpage-leftside {
+    width: 35%;
+    height: 100%;
+    background-color: rgb(60, 7, 60);
+    color: white;
+}
+
+#login-logo-title {
+    padding-left: 20%;
+    padding-top: 10px;
+}
+
+#login-logo {
+    padding-top: 20%;
+    padding-left: 20%;
+    position: relative;
+}
+
+#loginpage-rightside {
+    height: 100%;
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#login-signup-header {
+    height: 100px;
+    width: 50%;
+    margin-top: 5%;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid grey;
+}
+
+#select-login {
+    width: 50%;
+    height: calc(100% - 5px);
+    color: rgb(60, 7, 60);
+    cursor: pointer;
+    transition: all 0.4s ease-in-out;
+}
+#select-login > h2 {
+    margin-top: 50px;
+    margin-left: 30px;
+}
+
+#select-signup {
+    width: 50%;
+    height: calc(100% - 5px);
+    color: rgb(60, 7, 60);
+    cursor: pointer;
+    transition: all 0.4s ease-in-out;
+}
+#select-signup > h2 {
+    margin-top: 50px;
+    margin-left: 30px;
+}
+
+#login-form {
+    margin-top: 100px;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all .4s ease-out;
+}
+
+/* #login-form > input {
+    background-color: white;
+    border: none;
+    border-bottom: 0.5px solid grey;
+    width: 90%;
+    height: 35px;
+    font-size: large;
+    padding-left: 10px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+    outline: none;
+} */
+
+#login-button {
+    width: 60%;
+    height: 40px;
+    border-radius: 5px;
+    border: 0.5px solid #3c073c;
+    text-align: center;
+    line-height: 40px;
+    transition: all .4s ease-in-out;
+    color: white;
+    background-color: rgb(60, 7, 60);
+    margin-top: 50px;
+}
+
+#login-button:hover {
+    background-color: rgb(82, 26, 82);
+    cursor: pointer;
+}
+
+#reset-pwd {
+    margin-top: 15px;
+    margin-left: -200px;
+    cursor: pointer;
+}
+
+#login-signup-msg {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+#err-msg {
+    margin-top: 20px;
+    color: red;
+    font-style: italic;
+}
+
+.login-input {
+    border-radius: 0px;
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "_id":"63a0523f8579b6103c55f8e2",
+    "schoolId":"637cc6f1467856febd2808c8",
+    "name":"Primary 1",
+    "classTeacher":"Mr T.",
+    "noOfStudents":0,
+    "classFees":"30000",
+    "totalFeesExpected":0,
+    "totalFees":0,
+    "createdAt":"2022-12-19T11:59:59.056Z",
+    "updatedAt":"2022-12-19T11:59:59.056Z"
+  },
+  {
+    "_id":"63a053fe8579b6103c55f8e6",
+    "schoolId":"637cc6f1467856febd2808c8",
+    "name":"Primary 2",
+    "classTeacher":"Mrs Steph",
+    "noOfStudents":0,
+    "classFees":"35000",
+    "totalFeesExpected":0,
+    "totalFees":0,
+    "createdAt":"2022-12-19T12:07:26.873Z",
+    "updatedAt":"2022-12-19T12:07:26.873Z"
+  },
+  {
+    "_id":"63a0556e8579b6103c55f8eb",
+    "schoolId":"637cc6f1467856febd2808c8",
+    "name":"Primary 3",
+    "classTeacher":"Mrs B.",
+    "noOfStudents":0,
+    "classFees":"40000",
+    "totalFeesExpected":0,
+    "totalFees":0,
+    "createdAt":"2022-12-19T12:13:34.466Z",
+    "updatedAt":"2022-12-19T12:13:34.466Z"
+  },
+  {
+    "_id":"63a0568f8579b6103c55f8ef",
+    "schoolId":"637cc6f1467856febd2808c8",
+    "name":"Primary 4",
+    "classTeacher":"Mr. K.",
+    "noOfStudents":0,
+    "classFees":"45000",
+    "totalFeesExpected":0,
+    "totalFees":0,
+    "createdAt":"2022-12-19T12:18:23.331Z",
+    "updatedAt":"2022-12-19T12:18:23.331Z"
+  }
+]

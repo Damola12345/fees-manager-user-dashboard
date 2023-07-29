@@ -1,0 +1,29 @@
+#profile-dropdown-container {
+    position: fixed;
+    width: 200px;
+    height: 0px;
+    z-index: 1;
+    background-color: whitesmoke;
+    margin-left: calc(100% - 200px);
+    padding-top: 60px;
+    border-left: 0.5px solid grey;
+    border-bottom: 0.5px solid grey;
+    transition: all .4s ease-in-out;
+    display: flex;
+    flex-direction: row;
+}
+
+#right-profile {
+    width: 80%;
+    display: none;
+}
+
+#left-profile {
+    padding-top: 10px;
+    width: 20%;
+    background-color: rgb(60, 7, 60);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.2rem;
+}

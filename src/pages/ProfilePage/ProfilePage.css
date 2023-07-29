@@ -1,0 +1,215 @@
+/* input {
+    height: 30px;
+} */
+
+#profile-con {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+}
+
+#nav-btns {
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 50px;
+    gap: 100%;
+}
+
+#save-btn {
+    margin-left: 40%;
+}
+
+#return {
+    width: 40px;
+    height: 30px;
+    margin-left: -30%;
+    margin-bottom: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#back {
+    transition: all .4s ease-in-out;
+}
+
+#back:hover {
+    color: purple;
+    cursor: pointer;
+    transform: translate(-2px, -2px);
+}
+
+#profile-pic {
+    background-color: whitesmoke;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+}
+
+#pic-and-title {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 250px;
+    margin-left: -35%;
+    margin-bottom: 30px;
+}
+
+#input-pic {
+    width: 200px;
+    background-color: white;
+    border: none;
+}
+
+#upload-and-pic {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+#info-page {
+    position: relative;
+    width: 70%;
+    height: 75%;
+    background-color: white;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#profile-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: rgb(60, 7, 60);
+    margin-top: 10px;
+    margin-bottom: 50px;
+}
+
+.edit-input {
+    display: flex;
+    flex-direction: row;
+}
+
+.input-txt {
+    color: rgb(57, 53, 53);
+    width: 100px;
+}
+.input-txt-2 {
+    color: rgb(57, 53, 53);
+    width: 150px;
+}
+
+input {
+    width: 250px;
+    border: 0.5px solid gray;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 5px;
+    background-color: white;
+}
+
+#input-pair {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 50px;
+    padding-right: 50px;
+    margin-bottom: 30px;
+    gap: 20px;
+}
+
+#input-single {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+    margin-left: 50px;
+    margin-bottom: 30px;
+}
+
+#input-phone {
+    margin-left: 2px;
+}
+
+#input-class {
+    margin-left: 5px;
+}
+
+.immutable {
+    background-color: whitesmoke;
+}
+
+#sex-dropdown {
+    max-height: 100px;
+}
+
+#final-buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    align-self: center;
+}
+
+.checkout-btns {
+    height: 30px;
+    width: 70px;
+    border: 0.5px solid gray;
+    border-radius: 5px;
+    background-color: white;
+    transition: all .4s ease-in-out;
+}
+
+.checkout-btns:hover {
+    background-color: rgb(60, 7, 60);
+    color: white;
+    cursor: pointer;
+}
+
+#confirm-btn {
+    background-color: rgb(60, 7, 60);
+    color: white;
+}
+
+#save-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#save-pwd {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: -15%;
+}
+
+.change-pwd-btn {
+    width: 150px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 0.5px solid gray;
+}
+
+#err {
+    color: red;
+    margin-top: 20px;
+    font-style: italic;
+}

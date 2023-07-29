@@ -1,0 +1,73 @@
+[
+  {
+    "_id":"637cc6f1467856febd2808c8",
+    "ownerId":"6331d109e570d7092b4eecde",
+    "name":"Potters Homes",
+    "address":"Akinsola, Lagos",
+    "level":"Primary",
+    "createdAt":"2022-11-22T12:56:17.107Z",
+    "updatedAt":"2022-12-19T12:48:23.555Z",
+    "noOfStudents":0,
+    "totalFees":0
+  },
+  {
+    "_id":"637d10ca7718e308dd4c469d",
+    "ownerId":"6331d109e570d7092b4eecde",
+    "name":"Potters Home Sch",
+    "address":"Akinsola, Lagos",
+    "level":"Secondary",
+    "createdAt":"2022-11-22T18:11:22.575Z",
+    "updatedAt":"2022-11-22T18:11:22.575Z",
+    "noOfClassrooms":4,
+    "noOfStudents":0,
+    "totalFees":0
+  },
+  {
+    "_id":"637dcc6c29190b0f5e68f765",
+    "ownerId":"6331d109e570d7092b4eecde",
+    "name":"The Lordsfield",
+    "address":"Olusola, Lagos",
+    "level":"Secondary",
+    "createdAt":"2022-11-23T07:31:56.419Z",
+    "updatedAt":"2022-11-23T07:31:56.419Z",
+    "noOfClassrooms":5,
+    "noOfStudents":0,
+    "totalFees":0
+  },
+  {
+    "_id":"637dccce6d13dd0f774f7734",
+    "ownerId":"6331d109e570d7092b4eecde",
+    "name":"Potters Secondary",
+    "address":"Olusola, Lagos",
+    "level":"Secondary",
+    "createdAt":"2022-11-23T07:33:34.103Z",
+    "updatedAt":"2022-11-23T07:33:34.103Z",
+    "noOfClassrooms":3,
+    "noOfStudents":0,
+    "totalFees":0
+  },
+  {
+    "_id":"637f8148e2794c0dc82b2693",
+    "ownerId":"6331d109e570d7092b4eecde",
+    "name":"The Lordsfield schools",
+    "address":"Akinsola, Lagos",
+    "level":"Primary",
+    "createdAt":"2022-11-24T14:35:52.583Z",
+    "updatedAt":"2022-12-16T07:52:15.934Z",
+    "noOfClassrooms":6,
+    "noOfStudents":0,
+    "totalFees":0
+  },
+  {
+    "_id":"639c2db25d9cd8e10c12cfa5",
+    "ownerId":"6331d109e570d7092b4eecde",
+    "name":"Christland",
+    "address":"Ikoyi Lagos",
+    "level":"Secondary",
+    "createdAt":"2022-12-16T08:34:58.284Z",
+    "updatedAt":"2022-12-16T08:34:58.284Z",
+    "noOfClassrooms":0,
+    "noOfStudents":0,
+    "totalFees":0
+  }
+]

@@ -1,0 +1,99 @@
+.html {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+}
+
+#welcome-page {
+    width: 100%;
+    height: 100%;
+    padding-bottom: 20px;
+    /*background-color: rgb(145, 162, 185);*/
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+
+#welcome-name {
+    text-align: center;
+    color: rgb(60, 7, 60);
+    margin-top: 40px;
+}
+
+#welcome-container-schools {
+    background-color: whitesmoke;
+    width: 100%;
+    height: 500px;
+    overflow: scroll;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    border-radius: 30px;
+    color: rgb(60, 7, 60);
+    padding-left: 50px;
+    padding-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#welcome-container-schools > h3 {
+    position: relative;
+    margin-top: 200px;
+}
+
+#schools-list {
+    margin-top: 50px;
+    display: grid;
+    justify-content: center;
+    align-content: space-between;
+    gap: 50px;
+    grid-template-columns: repeat(3, 250px);
+}
+
+#welcome-container {
+    background-color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    height: 100%;
+    margin-bottom: 50px;
+    color: rgb(60, 7, 60);
+    margin-top: -20px;
+    padding: 70px;
+    padding-bottom: 60px;
+    padding-left: 50px;
+    padding-right: 50px;
+    border-radius: 20px;
+}
+
+#welcome-title {
+    padding-bottom: 30px;
+}
+
+#welcome-text {
+    padding-bottom: 20px;
+}
+
+#welcome-text > h2 {
+    padding-bottom: 15px;
+}
+
+video {
+    width: 500px;
+    height: 250px;
+    margin-left: -60px;
+}
+
+#welcome-create-btn {
+    margin-top: 30px;
+}
+
+#demo-video {
+    padding-bottom: 50px;
+    color: #a855f7;
+}

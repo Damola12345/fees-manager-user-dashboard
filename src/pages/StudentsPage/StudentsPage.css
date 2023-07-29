@@ -1,0 +1,230 @@
+#students-view-con {
+    width: 150%;
+    height: auto;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#filters-con {
+    position: fixed;
+    width: 15%;
+    height: auto;
+    background-color: whitesmoke;
+    color: rgb(60, 7, 60);
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    border-radius: 10px;
+    padding: 20px;
+    overflow: scroll;
+    margin-bottom: 50px;
+    margin-top: -65px;
+    padding-top: 0;
+    font-size: .9rem;
+    margin-left: -2%;
+}
+
+#students-con {
+    position: relative;
+    width: 100%;
+    height: 95%;
+    background-color: white;
+    margin-left: 25%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+#top-section {
+    position: fixed;
+    width: 67.5%;
+    z-index: 1;
+    background-color: white;
+    padding-top: 70px;
+    margin-top: -130px;
+    border-bottom: 0.5px solid grey;
+}
+
+#bottom-section {
+    position: relative;
+    padding-top: 125px;
+    width: 100%;
+    background-color: white;
+}
+
+#regstu {
+    margin-top: 0px;
+    margin-bottom: 50px;
+    z-index: 5;
+    margin-left: 70%;
+}
+
+#reg-btn {
+    margin-left: 70%;
+}
+
+#filter-title {
+    margin-top: 30px;
+    border-bottom: 0.5px solid grey;
+    width: 80%;
+    text-align: center;
+}
+
+#filter-title > h3 {
+    padding-bottom: 10px;
+}
+
+/*#ClassFilter {
+    margin-top: 20px;
+    height: 150px;
+    max-height: 150px;
+}*/
+
+.filter-component {
+    margin-top: 20px;
+    max-height: 150px;
+}
+
+#class-options {
+    background-color: white;
+    width: 100%;
+    height: 120px;
+    max-height: 120px;
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+    border-radius: 10px;
+    padding-top: 10px;
+}
+
+.filter-option {
+    padding-bottom: 10px;
+    font-weight: bold;
+}
+
+.c-o {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: justify;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+input[type="checkbox"] {
+    zoom: .3;
+    padding: 0px;
+    margin: 0;
+    margin-left: -100px;
+    margin-right: -70px;
+}
+
+/*input[type="range"] {
+    width: 70%;
+    background-color: rgb(60, 7, 60);
+    color: red;
+    border: none;
+}*/
+
+#sex-filter {
+    margin-top: 20px;
+}
+
+#search-filter {
+    margin-top: 40px; 
+}
+
+#stu-search-box {
+    width: 80%;
+    height: 30px;
+    background-color: white;
+    border-radius: 5px;
+    padding-left: 10px;
+}
+
+#discount-filter {
+    margin-top: 20px;
+}
+
+.filter-input {
+    width: 50%;
+    height: 30px;
+    background-color: white;
+    border-radius: 5px;
+    margin-left: 20px;
+    padding-left: 10px;
+}
+
+#students-scroll-view {
+    height: 1000px;
+    width: 100%;
+    overflow: scroll;
+    background-color: white;
+}
+
+#ScrollOption-header {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: rgb(60, 7, 60);
+}
+
+#ScrollOption {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: white;
+    border-bottom: 0.5px solid rgb(237, 233, 233);
+    height: 40px;
+    line-height: 40px;
+}
+
+#ScrollOption:hover {
+    background-color: whitesmoke;
+    cursor: pointer;
+    color: purple;
+}
+
+#scroll-name {
+    width: 40%;
+    overflow: ellipse;
+}
+
+#scroll-class {
+    width: 25%
+}
+
+#scroll-fees {
+    width: 15%;
+}
+
+#scroll-discount {
+    width: 10%;
+}
+
+#scroll-sex {
+    width: 10%;
+}
+
+#students-con-header {
+    padding-bottom: 10px;
+}
+
+#min-percent {
+    margin-bottom: 10px;
+}
+
+.scroll-col {
+    overflow: scroll;
+    font-weight: lighter;
+}
+
+.scroll-header {
+    font-size: large;
+}

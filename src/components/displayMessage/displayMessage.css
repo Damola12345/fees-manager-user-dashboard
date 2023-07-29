@@ -1,0 +1,26 @@
+#message-box {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    width: 95%;
+    height: 40px;
+    background-color: rgb(231, 195, 231);
+    color: black;
+    margin-top: 70px;
+    margin-left: 2.5%;
+    border-radius: 5px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 10px;
+    box-shadow: 2px 2px rgb(194, 185, 185);
+    border-top: 0.5px solid grey;
+}
+
+#message-box > p {
+    margin-left: 400px;
+}
+
+#cancel-message:hover {
+    cursor: pointer;
+}

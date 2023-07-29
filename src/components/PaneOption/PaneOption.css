@@ -1,0 +1,17 @@
+.pane-option-container {
+    position: relative;
+    width: calc(100% - 20px);
+    height: 30px;
+    text-align: justify;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    font-size: 1rem;
+    padding-left: 20px;
+    transition: all .3s ease-in-out;
+}
+
+.pane-option-container:hover {
+    background-color: white;
+    color: purple;
+    cursor: pointer;
+}

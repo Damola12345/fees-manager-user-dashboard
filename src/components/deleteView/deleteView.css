@@ -1,0 +1,30 @@
+#del-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+}
+
+#del-txt {
+    color: red;
+    margin-bottom: 50px;
+    margin-top: 20px;
+}
+
+#ent-txt {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#del-sch-input {
+    margin-bottom: 0px;
+}
+
+#del-prev {
+    margin-left: -60%;
+    margin-top: -20%;
+}

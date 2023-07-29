@@ -1,0 +1,74 @@
+#school-reg-container {
+    position: relative;
+    padding-top: 0px;
+    background-color: white;
+    height: auto;
+    width: 100%;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.school-reg-form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    padding-bottom: 40px;
+}
+
+.input-field {
+    border: 0.5px solid grey;
+    border-radius: 5px;
+    padding-top: 0px;
+    padding-left: 5px;
+    background-color: white;
+}
+
+.form-input {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.form-text {
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+
+#reg-school-title {
+    padding-bottom: 0px;
+    width: 100%;
+    text-align: center;
+    color: rgb(60, 7, 60);
+    align-self: center;
+}
+
+#submit-sch {
+    margin-top: 50px;
+    align-self: center;
+}
+
+#sch-reg-pwd {
+    margin-top: 50px;
+    align-self: center;
+}
+
+#login-signup-msg {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+#err-msg {
+    align-self: center;
+    margin-top: 20px;
+    color: red;
+    font-style: italic;
+}
+
+.level-dropdown {
+    width: 90px;
+    height: 30px;
+    border-radius: 5px;
+}
