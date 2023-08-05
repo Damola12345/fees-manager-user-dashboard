@@ -22,7 +22,6 @@ const Header = () => {
   const selectSchool = (e, school) => {
     e.stopPropagation();
     setCurrentSchool(school);
-    setLocalStorageItems("currentSchool", school);
     setSchoolDropdown(false);
   };
 

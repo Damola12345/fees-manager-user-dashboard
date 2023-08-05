@@ -1,0 +1,15 @@
+.school-page {
+  @apply w-full flex flex-col items-center pb-20;
+
+  &__con {
+    @apply w-full flex flex-col items-center;
+
+    .heading {
+      @apply text-2xl font-extrabold mb-10 text-purple;
+    }
+
+    .school-list {
+      @apply flex flex-wrap items-center justify-center gap-5 sm:gap-x-10;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import AllClassroomsPage from "../classrooms/AllClassroomsPage";
+import AllClassroomsPage from "../classrooms/ClassroomsPage";
 import CreatePaymentPage from "../payments/CreatePaymentPage";
 import DetailView from "../../layouts/details/DetailView";
 import EditClassroom from "../classrooms/editClassroom";
