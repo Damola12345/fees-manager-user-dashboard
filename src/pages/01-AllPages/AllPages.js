@@ -16,14 +16,14 @@ import AuthLayout from "../../layouts/auth/AuthLayout";
 import StudentsPage from "../students/StudentsPage";
 import RegisterStudentPage from "../students/RegisterStudentPage";
 import VerifyEmailPage from "../auth/VerifyEmailPage";
-import WelcomePage from "../WelcomePage/WelcomePage";
+import HomePage from "../HomePage/HomePage";
 import RegsisterSchoolPage from "../schools/RegisterSchoolPage";
 import DashboardLayout from "../../layouts/dashboard/DashboardLayout";
 
 export const Home = () => {
   return (
     <DashboardLayout>
-      <WelcomePage />
+      <HomePage />
     </DashboardLayout>
   );
 };

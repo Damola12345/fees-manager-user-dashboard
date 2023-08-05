@@ -2,7 +2,11 @@
   @apply w-full h-screen p-0 m-0 bg-white flex flex-col lg:flex-row transition-all ease-in ease-out duration-300 px-10 py-10 md:p-20 lg:p-0;
 
   &__left {
-    @apply relative text-purple lg:bg-purple lg:w-[35%] lg:text-white lg:pt-20;
+    @apply relative text-purple lg:bg-purple lg:text-white lg:pt-20;
+
+    @media screen and (min-width: 1024px) {
+      width: 35%;
+    }
 
     .logo {
       @apply w-full flex flex-col items-center gap-1;
@@ -17,7 +21,10 @@
     @apply w-full bg-white flex flex-col items-center py-20 overflow-scroll;
 
     &-con {
-      @apply w-full mt-20 flex flex-col items-center lg:w-[50%];
+      @apply w-full mt-20 flex flex-col items-center;
+      @media screen and (min-width: 1024px) {
+        width: 50%;
+      }
 
       .header {
         @apply flex flex-row justify-between w-full px-10 pb-3 lg:mt-20 text-xl text-purple font-extrabold;
@@ -28,10 +35,13 @@
       }
 
       .full-border {
-        @apply w-full flex flex-row border-b border-b-[grey];
+        @apply w-full flex flex-row;
+
+        border-bottom: 1px solid gray;
 
         .half-border {
-          @apply w-[50%] transition-all ease-in ease-out duration-300;
+          @apply transition-all ease-in ease-out duration-300;
+          width: 50%;
         }
 
         .active {

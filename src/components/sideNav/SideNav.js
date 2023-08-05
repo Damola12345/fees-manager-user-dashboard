@@ -1,6 +1,6 @@
 import { ReactComponent as LogoIcon } from "../../assets/svg/logo.svg";
 import { ReactComponent as SchoolIcon } from "../../assets/svg/schools.svg";
-import { ReactComponent as BurgerIcon } from "../../assets/svg/burger-menu.svg";
+import { ReactComponent as ProfileIcon } from "../../assets/svg/profile.svg";
 import { ReactComponent as ClassroomIcon } from "../../assets/svg/classrooms.svg";
 import { ReactComponent as StudentsIcon } from "../../assets/svg/students.svg";
 import { ReactComponent as PaymentsIcon } from "../../assets/svg/payments.svg";
@@ -39,6 +39,13 @@ const SideNav = () => {
       </div>
 
       <div className="nav-con__bottom">
+        <NavLink
+          to="/profile"
+          className="nav-con__bottom-link group border-b-[0.5px] border-b-white"
+        >
+          <ProfileIcon />
+          <p className="description group-hover:block">Profile</p>
+        </NavLink>
         <button
           type="button"
           className="nav-con__bottom-link group"

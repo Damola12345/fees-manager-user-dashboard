@@ -1,0 +1,39 @@
+.display-card {
+  @apply relative bg-white shadow-md border-opacity-50 flex flex-col items-center justify-center p-7 rounded-md gap-3 text-center transition-all ease-in ease-out duration-300 text-purple hover:shadow-xl;
+
+  height: 270px;
+  width: 280px;
+  border: 1px solid whitesmoke;
+}
+
+.display-button {
+  @apply h-10 text-sm rounded-md px-3 flex flex-row gap-2 items-center justify-center mt-2;
+
+  &__default {
+    @apply bg-midPurple text-white;
+    svg {
+      fill: white;
+    }
+  }
+
+  &__light {
+    @apply bg-white text-midPurple border border border-midPurple border-opacity-50;
+    svg {
+      fill: #680e4b;
+    }
+  }
+}
+
+.display-icon {
+  @apply rounded-full bg-white flex items-center justify-center;
+
+  height: 65px;
+  width: 65px;
+  border: 1px solid whitesmoke;
+
+  svg {
+    height: 25px;
+    width: 25px;
+    fill: #680e4b;
+  }
+}

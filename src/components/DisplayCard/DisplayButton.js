@@ -1,17 +1,23 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { ReactComponent as RightArrow } from "../../assets/svg/right-arrow.svg";
 
-const DisplayButton = (props) => {
+const DisplayButton = ({ children, light, onClick, icon, full, shadow }) => {
   return (
-    <button className={`
-      w-[190px] h-[40px] text-sm rounded-md px-3
-      flex flex-row gap-2 items-center justify-center mt-2 group
-      ${props.light ? 'bg-white text-[purple] border border-[1px] border-[purple] border-opacity-50' : 'bg-[purple] text-white'}`
-  }>
-      {props.children}
-      <FontAwesomeIcon icon={faArrowRight} className='group-hover:translate-x-0.5 transition-all duration-200' />
+    <button
+      className={`
+       display-button group
+      ${light ? "display-button__light" : "display-button__default"}
+      ${full ? "w-full" : "w-[190px]"}
+      ${shadow && "shadow-md"}`}
+      onClick={onClick}
+    >
+      {children}
+      {icon ? (
+        icon
+      ) : (
+        <RightArrow className="group-hover:translate-x-0.5 transition-all duration-200" />
+      )}
     </button>
-  )
-}
+  );
+};
 
 export default DisplayButton;

@@ -15,13 +15,12 @@ const DashboardLayout = ({ children }) => {
   }, [user]);
 
   return (
-    <div className="flex">
+    <div className="dashboard">
       <SideNav />
-      <div className="h-screen w-[calc(100%-65px)] overflow-scroll">
+      <div className="dashboard__display">
         <Header />
-        <div className="h-[calc(100%)] full overflow-scroll">
-          <div className="px-5 md:px-10 xl:px-20 pt-20">{children}</div>
-          {/* <div className="h-screen w-full"></div> */}
+        <div className="dashboard__display-con">
+          <div className="content">{children}</div>
         </div>
       </div>
     </div>
