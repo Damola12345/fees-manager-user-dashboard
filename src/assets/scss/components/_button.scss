@@ -1,0 +1,40 @@
+.standard-btn-1 {
+  @apply bg-purple flex items-center justify-center text-white text-18 transition-all duration-200;
+  height: 55px;
+  border-radius: 8px;
+
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  &:focus {
+    @apply bg-purple;
+  }
+  &:hover {
+    @apply opacity-100 bg-midPurple;
+  }
+  &.no-bg {
+    @apply bg-white border-purple border-[1px] text-black-400;
+  }
+  &.standard-w {
+    width: 272px;
+  }
+  &.full {
+    @apply w-full;
+  }
+  svg {
+    @apply mr-3;
+  }
+  &.grey {
+    background-color: #97a2b6;
+  }
+  &.trans {
+    @apply text-black-400;
+    background-color: #fff;
+  }
+  &.white {
+    @apply text-black-300 border-midPurple;
+    border: 1px solid;
+    background-color: rgba(18, 18, 18, 0.02);
+  }
+}

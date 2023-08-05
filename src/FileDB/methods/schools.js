@@ -1,6 +1,13 @@
 // Prototype for a School object
 
+import {
+  deleteLocalStorageItem,
+  editLocalStorageItem,
+  getLocalStorageItem,
+  setLocalStorageItems,
+} from "../../utils/index.";
 import raw from "../database/schools.txt";
+import uuid from "react-uuid";
 
 class SchoolObject {
   constructor(ownerId, name, address, level, noOfClassrooms = 0) {
@@ -8,8 +15,8 @@ class SchoolObject {
     this.name = name;
     this.address = address;
     this.level = level;
-    this.createdAt = new Date;
-    this.updatedAt = new Date;
+    this.createdAt = new Date();
+    this.updatedAt = new Date();
     this.noOfClassrooms = noOfClassrooms;
     this.noOfStudents = 0;
     this.totalFees = 0;
@@ -19,38 +26,51 @@ class SchoolObject {
 const schools = [];
 
 class SchoolMethods {
-  async Create() {
+  async create(data) {
     // Function to create a School
+    const user = localStorage.getItem("user");
+    const allSchools = await getLocalStorageItem("schools");
+    const newSch = {
+      _id: uuid(),
+      ...data,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      noOfStudents: 0,
+      ownerId: user._id,
+      totalFees: 0,
+    };
+
+    allSchools.push(newSch);
+    setLocalStorageItems("schools", allSchools);
+    return "ok";
   }
 
-  async get(filter) {
+  async get(filter, storage) {
     // Function to get a School
-    let schools;
-    let results = [];
-    let contains = true;
-    const keys = Object.keys(filter);
+    if (storage === "file") {
+      let schools;
 
-    await fetch(raw)
-      .then((data) => data.text())
-      .then((text) => {
-        schools = JSON.parse(text);
-        schools.map((school) => {
-          contains = true;
-          keys.map((key) => {
-            if (school[key] !== filter[key]) contains = false;
-          })
-          if (contains) results.push(school)
-        })
-      });
-    return (keys.length > 0 ? results : schools);
+      await fetch(raw)
+        .then((data) => data.text())
+        .then((text) => {
+          schools = JSON.parse(text);
+        });
+      return schools;
+    } else {
+      const schools = await getLocalStorageItem("schools", filter);
+      return schools;
+    }
   }
 
-  async Edit() {
+  async Edit(filter, data) {
     // Function to edit School
+    return editLocalStorageItem(filter, { ...data, updatedAt: new Date() });
   }
 
-  async Delete() {
+  async delete(filter) {
     // Function to delete School
+    // COME BACK TO IMPLEMENT CASCADE DELETE!!!
+    return deleteLocalStorageItem("schools", filter);
   }
 }
 

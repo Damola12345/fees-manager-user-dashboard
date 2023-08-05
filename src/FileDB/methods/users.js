@@ -1,10 +1,9 @@
 // Handle user operations for file database system
 
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from "uuid";
 import raw from "../database/users.txt";
 
 class UserMethods {
-
   async get(filter = {}) {
     // Function to get a user
     let users;
@@ -20,11 +19,11 @@ class UserMethods {
           contains = true;
           keys.map((key) => {
             if (user[key] !== filter[key]) contains = false;
-          })
-          if (contains) results.push(user)
-        })
+          });
+          if (contains) results.push(user);
+        });
       });
-    return (keys.length > 0 ? results : users);
+    return keys.length > 0 ? results : users;
   }
 
   /* async create(data) {
@@ -35,21 +34,20 @@ class UserMethods {
       .then((text) => {
         users = JSON.parse(text);
       });
-    
+
     users.push({
       _id: uuid(),
       ...data,
-      createdAt: new Date,
-      updatedAt: new Date,
+      createdAt: new Date(),
+      updatedAt: new Date(),
       password: hashPwd(data.password),
     });
-    console.log(users)
+    console.log(users);
 
-    await fetch('users.txt', {
-      method: 'POST',
+    await fetch("users.txt", {
+      method: "POST",
       body: data,
-    })
-    .then((data) => console.log(data.status))
+    }).then((data) => console.log(data.status));
   }
 
   async edit(filter, data) {

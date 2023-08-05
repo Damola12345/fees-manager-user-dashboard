@@ -1,7 +1,8 @@
 [
   {
     "_id":"63c4232999a3b026f52effe4",
-    "firstname":"guest","lastname":"user",
+    "firstname":"guest",
+    "lastname":"user",
     "email":"guest.user@test.me",
     "phone":"00000000000",
     "password":"e1977ffff70010f7dde0271da14905ab50d4df0b",

@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "./layouts/auth";
+@import "./components/loader";
+@import "./components/form";
+@import "./components/button";
+@import "./components/nav";
+@import "./components/header";

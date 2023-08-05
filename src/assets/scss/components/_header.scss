@@ -1,0 +1,98 @@
+.app-header {
+  @apply w-full relative;
+
+  .header-con {
+    @apply w-full absolute top-0 left-0 flex items-center justify-start bg-white shadow-md px-5 md:px-10 xl:px-20;
+    height: 70px;
+    z-index: 9999;
+
+    &__left {
+      width: 40%;
+
+      .dropdown-con {
+        @apply relative w-full flex items-center gap-4;
+
+        .button {
+          @apply flex items-center gap-4;
+
+          h2 {
+            @apply text-xl font-extrabold truncate text-midPurple;
+          }
+        }
+
+        .dropdown-list {
+          @apply absolute w-full flex flex-col items-start bg-white rounded-lg shadow-md py-5;
+          top: 60px;
+          z-index: 99999;
+
+          &__item {
+            @apply h-[45px] w-full text-start hover:bg-[whitesmoke] text-16 font-bold px-7 flex items-center transition-all ease-in ease-out duration-300;
+            height: 45px;
+          }
+        }
+
+        svg {
+          fill: #680e4b;
+          width: 12px;
+          height: 12px;
+        }
+      }
+    }
+
+    &__right {
+      @apply h-full flex items-center justify-between;
+      width: 60%;
+
+      .dropdown-list {
+        @apply absolute w-full flex flex-col items-start bg-white rounded-lg shadow-md py-5 overflow-scroll;
+        top: 60px;
+        max-height: 300px;
+
+        &__item {
+          @apply w-full text-start hover:bg-[whitesmoke] text-16 font-bold px-7 flex items-center transition-all ease-in ease-out duration-300 cursor-pointer;
+          min-height: 45px;
+        }
+      }
+
+      .profile-icon {
+        @apply relative rounded-full border border-midPurple flex items-center gap-1 justify-center;
+        height: 40px;
+        width: 40px;
+
+        svg {
+          fill: #680e4b;
+          .small {
+            width: 8px;
+            height: 8px;
+          }
+        }
+
+        .dropdown-list2 {
+          @apply absolute right-0 flex flex-col items-start bg-white rounded-lg shadow-md text-14;
+          top: 60px;
+          width: 150px;
+          height: 80px;
+
+          &__item {
+            @apply flex items-center;
+            height: 45px;
+          }
+
+          .icon-con {
+            @apply bg-purple h-full flex items-center justify-center border-b border-b-grey;
+            width: 40px;
+          }
+
+          .text-con {
+            @apply h-full pl-3 text-start flex items-center;
+            width: 110px;
+          }
+
+          svg {
+            fill: white;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,49 @@
+.nav-con {
+  @apply relative h-screen flex flex-col justify-between bg-purple px-2;
+  width: 65px;
+  z-index: 99999;
+
+  &__top {
+    &-home {
+      @apply w-full flex items-center justify-center;
+      height: 70px;
+
+      svg {
+        width: 35px;
+        height: 35px;
+        fill: white;
+      }
+    }
+    &-link {
+      @apply w-full relative h-14 flex items-center justify-center;
+
+      border-bottom: 0.5px solid white;
+
+      .description {
+        @apply absolute left-[100%] ml-5 hidden bg-midPurple text-white text-14 rounded-md px-2 py-1;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+        fill: white;
+      }
+    }
+  }
+  &__bottom {
+    @apply mb-10;
+    &-link {
+      @apply w-full relative h-14 flex items-center justify-center;
+
+      .description {
+        @apply absolute left-[100%] ml-5 hidden bg-midPurple text-white text-14 rounded-md px-2 py-1;
+      }
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+      fill: white;
+    }
+  }
+}

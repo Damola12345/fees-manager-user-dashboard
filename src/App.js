@@ -1,13 +1,11 @@
 //import VerifyEmail from './components/verifyEmail/VerifyEmail';
-import './global.css';
+import "./global.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { useParams } from "react-router-dom"
-import React from 'react';
+import { useParams } from "react-router-dom";
+import React from "react";
 import {
   Classrooms,
-  DeleteClassroom,
-  DeleteSchool,
-  DeleteStudent,
+  Dashboard,
   EditClassroomData,
   EditSchoolData,
   EditStudentData,
@@ -28,46 +26,67 @@ import {
   ViewPayment,
   ViewSchool,
   ViewStudent,
-} from './pages/01-AllPages/AllPages';
+} from "./pages/01-AllPages/AllPages";
+import { AuthProvider } from "./contexts/AuthContext";
+import { DashboardProvider } from "./contexts/DashboardContext";
 
 function App() {
   //const { className } = useParams()
-  const { studentName } = useParams()
+  //const { studentName } = useParams();
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path='/verify-email' element={<Verify />} />
-        <Route path='/reset-password' element={<ResetPassword />} />
-        <Route path='/profile' element={<UserProfile />} />
+    <AuthProvider>
+      <DashboardProvider>
+        <Router>
+          <Routes>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/verify-email" element={<Verify />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/profile" element={<UserProfile />} />
 
-        <Route path="/schools" element={<Schools />} />
-        <Route path="/register-school" element={<RegisterSchool />} />
-        <Route path="/schools/:schoolName" element={<ViewSchool />} />
-        <Route path='/schools/:schoolName/edit' element={<EditSchoolData />} />
-        <Route path='/schools/:schoolName/delete' element={<DeleteSchool />} />
+            <Route path="/schools" element={<Schools />} />
+            <Route path="/register-school" element={<RegisterSchool />} />
+            <Route path="/schools/:schoolName" element={<ViewSchool />} />
+            <Route
+              path="/schools/:schoolName/edit"
+              element={<EditSchoolData />}
+            />
 
-        <Route path="/register-classroom" element={<RegisterClassroom />} />
-        <Route path="/classrooms" element={<Classrooms />} />
-        <Route path="/classrooms/:className" element={<ViewClassroom />} />
-        <Route path='/classrooms/:className/edit' element={<EditClassroomData />} />
-        <Route path='/classrooms/:className/delete' element={<DeleteClassroom />} />
+            <Route path="/register-classroom" element={<RegisterClassroom />} />
+            <Route path="/classrooms" element={<Classrooms />} />
+            <Route path="/classrooms/:className" element={<ViewClassroom />} />
+            <Route
+              path="/classrooms/:className/edit"
+              element={<EditClassroomData />}
+            />
 
-        <Route path="/register-student" element={<RegisterStudent />} />
-        <Route path="/students" element={<Students />} />
-        <Route path="/students/:studentId" element={<ViewStudent id={studentName} forceRefresh={true}/>} />
-        <Route path='/students/:studentId/edit' element={<EditStudentData />} />
-        <Route path='/students/:studentId/delete' element={<DeleteStudent />} />
+            <Route path="/register-student" element={<RegisterStudent />} />
+            <Route path="/students" element={<Students />} />
+            <Route
+              path="/students/:studentId"
+              element={
+                <ViewStudent /* id={studentName} forceRefresh={true} */ />
+              }
+            />
+            <Route
+              path="/students/:studentId/edit"
+              element={<EditStudentData />}
+            />
 
-        <Route path="/payments" element={<Payments />} />
-        <Route path="/make-payment" element={<MakePayment />} />
-        <Route path="/payments/:paymentId" element={<ViewPayment id={studentName}/>} />
-      </Routes>
-    </Router>
-  )
+            <Route path="/payments" element={<Payments />} />
+            <Route path="/make-payment" element={<MakePayment />} />
+            <Route
+              path="/payments/:paymentId"
+              element={<ViewPayment /* id={studentName} */ />}
+            />
+          </Routes>
+        </Router>
+      </DashboardProvider>
+    </AuthProvider>
+  );
 }
 
 //<Route path="/schools/:schoolName/students" element={<Students group="school" id="schoolName" />} />

@@ -1,0 +1,77 @@
+// Change Autocomplete styles
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset;
+}
+
+.standard-input-1 {
+  .label {
+    @apply text-14;
+    margin-bottom: 6px;
+  }
+
+  .input-box {
+    @apply self-start flex gap-4 items-center px-5;
+    border-radius: 8px;
+    height: 55px;
+
+    .full {
+      @apply w-full;
+    }
+
+    .input {
+      @apply p-0 outline-none border-none text-16 text-black;
+      height: 51px;
+    }
+  }
+
+  .search-box {
+    @apply self-start flex gap-4 items-center px-5;
+    border-radius: 8px;
+    height: 40px;
+
+    .full {
+      @apply w-full;
+    }
+
+    .input {
+      @apply p-0 outline-none border-none text-16 text-black;
+      height: 34px;
+    }
+  }
+
+  .search-box {
+  }
+
+  .error {
+    @apply flex items-center text-14 text-red gap-2;
+    margin-top: 6px;
+
+    .err-icon {
+      @apply flex items-center justify-center bg-red rounded-full text-white;
+      font-size: 12px;
+      font-weight: 500;
+      width: 17px;
+      height: 17px;
+    }
+  }
+}
+
+.login-form {
+  @apply flex flex-col gap-4;
+}
+
+.login-modal {
+  @apply w-full h-full flex flex-col justify-between md:h-[500px] md:w-[700px] flex flex-col px-5 py-7 md:p-20 gap-5;
+}
+
+.signup-form {
+  @apply flex flex-col gap-4;
+}

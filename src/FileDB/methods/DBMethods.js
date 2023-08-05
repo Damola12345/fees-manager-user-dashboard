@@ -7,18 +7,18 @@ import PaymentMethods from "./payments";
 class FileDB {
   constructor() {
     this.mapCollection = {
-      'users': UserMethods,
-      'schools': SchoolMethods,
-      'classrooms': ClasroomMethods,
-      'students': StudentMethods,
-      'payments': PaymentMethods,
-    }
+      users: UserMethods,
+      schools: SchoolMethods,
+      classrooms: ClasroomMethods,
+      students: StudentMethods,
+      payments: PaymentMethods,
+    };
   }
 
-  async get(collectionName, filter) {
+  async get(collectionName, filter, storage) {
     // Read file system to get data
     const func = await this.mapCollection[collectionName];
-    const data = func.get(filter);
+    const data = func.get(filter, storage);
     return data;
   }
 
