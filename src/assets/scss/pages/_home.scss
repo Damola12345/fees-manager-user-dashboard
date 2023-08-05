@@ -1,0 +1,78 @@
+.home {
+  @apply h-full w-full text-purple pb-20 flex flex-col items-center justify-between;
+
+  &__header {
+    @apply text-2xl font-light text-start self-start;
+  }
+
+  &__cards {
+    @apply flex flex-wrap md:flex-row gap-10 items-center justify-start w-full mt-10;
+
+    &-text {
+      @apply text-16 text-start;
+      height: 60px;
+    }
+  }
+
+  &__footer {
+    @apply w-full mt-10 gap-16 md:gap-0 flex flex-col md:flex-row justify-evenly items-center;
+
+    @media screen and (min-width: 1720px) {
+      margin-top: 100px;
+    }
+
+    &-left {
+      @apply md:py-7;
+      .heading {
+        @apply text-xl font-extrabold py-1 leading-7;
+      }
+      .text {
+        min-width: 250px;
+        max-width: 500px;
+      }
+    }
+
+    &-border {
+      @apply hidden md:block border-opacity-50 lg:mx-10 mx-5;
+      height: 150px;
+      border-right: 0.5px solid grey;
+    }
+
+    &-right {
+      @apply w-full flex flex-row justify-center md:justify-center items-center;
+
+      .text {
+        @apply pb-5 text-sm;
+        min-width: 150px;
+        max-width: 250px;
+      }
+
+      .progress-bar {
+        scale: 0.4;
+
+        @media screen and (min-width: 500px) {
+          margin-top: 100px;
+        }
+      }
+    }
+  }
+
+  .notification-count {
+    @apply absolute ml-2 bg-red text-white rounded-full flex items-center justify-center;
+
+    margin-top: -25px;
+    width: 13px;
+    height: 13px;
+    font-size: 10px;
+  }
+
+  .home-logout {
+    @apply w-auto h-7 absolute bottom-7 right-5 xl:right-20 flex items-center gap-1 text-sm text-midPurple;
+
+    svg {
+      width: 18px;
+      height: 18px;
+      fill: #680e4b;
+    }
+  }
+}

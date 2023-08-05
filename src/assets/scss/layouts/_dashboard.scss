@@ -1,0 +1,24 @@
+.dashboard {
+  @apply flex;
+
+  &__display {
+    @apply h-screen overflow-scroll;
+    width: calc(100% - 65px);
+    background-color: whitesmoke;
+
+    &-con {
+      @apply h-full w-full overflow-scroll;
+
+      .content {
+        @apply h-full w-full px-5 md:px-10 xl:px-20;
+
+        padding-top: calc(70px + 40px);
+
+        @media screen and (min-width: 1720px) {
+          padding-left: 150px;
+          padding-right: 150px;
+        }
+      }
+    }
+  }
+}

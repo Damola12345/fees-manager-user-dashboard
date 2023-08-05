@@ -2,9 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "./pages/home";
 @import "./layouts/auth";
+@import "./layouts/dashboard";
 @import "./components/loader";
 @import "./components/form";
 @import "./components/button";
 @import "./components/nav";
 @import "./components/header";
+@import "./components/display-card";

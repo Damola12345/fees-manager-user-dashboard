@@ -1,5 +1,5 @@
 .standard-btn-1 {
-  @apply bg-purple flex items-center justify-center text-white text-18 transition-all duration-200;
+  @apply bg-midPurple flex items-center justify-center text-white text-18 transition-all duration-200;
   height: 55px;
   border-radius: 8px;
 
@@ -8,10 +8,10 @@
     cursor: not-allowed;
   }
   &:focus {
-    @apply bg-purple;
+    @apply bg-midPurple;
   }
   &:hover {
-    @apply opacity-100 bg-midPurple;
+    @apply opacity-100 bg-purple;
   }
   &.no-bg {
     @apply bg-white border-purple border-[1px] text-black-400;
