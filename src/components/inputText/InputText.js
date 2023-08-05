@@ -49,7 +49,10 @@ const InputText = ({
           value={value}
           onChange={onChange}
           onFocus={() => setInputFocus(true)}
-          onBlur={() => setInputFocus(false)}
+          onBlur={() => {
+            setInputFocus(false);
+            onBlur();
+          }}
           readOnly={readOnly}
         />
         {value.length > 0 && type === "search" && (

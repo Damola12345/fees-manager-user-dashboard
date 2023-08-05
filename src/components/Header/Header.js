@@ -39,6 +39,10 @@ const Header = () => {
     navigate(`/${currentSchool ? obj.path : "schools"}/${obj._id}`);
   };
 
+  useEffect(() => {
+    !searchText && setTimeout(() => setSearchResults([]), 500);
+  }, [searchText]);
+
   return (
     <div className="app-header">
       <div className="header-con">
@@ -99,7 +103,7 @@ const Header = () => {
               type="search"
             />
 
-            {searchText && searchResults.length > 0 && (
+            {searchResults.length > 0 && (
               <ul className="dropdown-list">
                 {(currentSchool ? searchResults : schools)?.map(
                   (obj, index) => {
