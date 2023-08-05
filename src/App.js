@@ -1,11 +1,9 @@
 //import VerifyEmail from './components/verifyEmail/VerifyEmail';
 import "./global.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { useParams } from "react-router-dom";
 import React from "react";
 import {
   Classrooms,
-  Dashboard,
   EditClassroomData,
   EditSchoolData,
   EditStudentData,
@@ -31,15 +29,11 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { DashboardProvider } from "./contexts/DashboardContext";
 
 function App() {
-  //const { className } = useParams()
-  //const { studentName } = useParams();
-
   return (
     <AuthProvider>
       <DashboardProvider>
         <Router>
           <Routes>
-            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />

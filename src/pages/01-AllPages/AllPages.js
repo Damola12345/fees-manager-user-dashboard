@@ -1,16 +1,13 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import AllClassroomsPage from "../classrooms/AllClassroomsPage";
 import CreatePaymentPage from "../payments/CreatePaymentPage";
 import DetailView from "../../layouts/details/DetailView";
 import EditClassroom from "../classrooms/editClassroom";
 import EditSchool from "../schools/editSchool";
 import EditStudent from "../students/editStudent";
-import Footer from "../../components/Footer/Footer";
 import LoginPage from "../auth/LoginPage";
-import PageLayout from "../../layouts/page/PageLayout";
 import PaymentsPage from "../payments/PaymentsPage";
 import ProfilePage from "../ProfilePage/ProfilePage";
-import React, { useEffect, useState } from "react";
 import RegisterClassroomPage from "../classrooms/RegisterClassroomPage";
 import ResetPwdPage from "../auth/ResetPwdPage";
 import SchoolsPage from "../schools/SchoolsPage";
@@ -19,20 +16,9 @@ import AuthLayout from "../../layouts/auth/AuthLayout";
 import StudentsPage from "../students/StudentsPage";
 import RegisterStudentPage from "../students/RegisterStudentPage";
 import VerifyEmailPage from "../auth/VerifyEmailPage";
-import WebsiteHeader from "../../components/Header/WebsiteHeader";
 import WelcomePage from "../WelcomePage/WelcomePage";
 import RegsisterSchoolPage from "../schools/RegisterSchoolPage";
 import DashboardLayout from "../../layouts/dashboard/DashboardLayout";
-
-const screenStyle = "m-0 p-0 w-screen h-screen";
-
-export const Dashboard = () => {
-  return (
-    <DashboardLayout>
-      <WelcomePage />
-    </DashboardLayout>
-  );
-};
 
 export const Home = () => {
   return (
