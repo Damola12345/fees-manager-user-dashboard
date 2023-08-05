@@ -22,8 +22,10 @@ export const DashboardProvider = ({ children }) => {
     schools: [],
   });
   const [searchObjects, setSearchObjects] = useState([]);
+  const [isLoading, setIsloading] = useState(false);
 
   useMemo(async () => {
+    setIsloading(true);
     if (reload.schools || reload.classrooms || reload.students) {
       let schObjects = allObjects.schools;
       let clsObjects = allObjects.classrooms;
@@ -60,6 +62,7 @@ export const DashboardProvider = ({ children }) => {
       });
       setSearchObjects([...schObjects, ...clsObjects, ...stuObjects]);
       setReload({ schools: false, classrooms: false, students: false });
+      setIsloading(false);
     }
   }, [reload]);
 
@@ -81,6 +84,7 @@ export const DashboardProvider = ({ children }) => {
         setReload,
         currentSchool,
         setCurrentSchool,
+        isLoading,
       }}
     >
       {children}

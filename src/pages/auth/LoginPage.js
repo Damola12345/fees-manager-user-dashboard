@@ -71,7 +71,7 @@ const LoginPage = () => {
       setLocalStorageItems("students", students);
       setLocalStorageItems("payments", payments);
       setLocalStorageItems("currentSchool", "");
-      setUser(user);
+      setUser(user[0]);
       new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve(navigate("/"));
