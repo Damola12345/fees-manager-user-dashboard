@@ -7,9 +7,11 @@ import { ReactComponent as PaymentsIcon } from "../../assets/svg/payments.svg";
 import { ReactComponent as LogoutIcon } from "../../assets/svg/logout.svg";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { useDashboard } from "../../contexts/DashboardContext";
 
 const SideNav = () => {
   const { logout } = useAuth();
+  const { currentSchool } = useDashboard();
 
   return (
     <div className="nav-con">
@@ -23,18 +25,24 @@ const SideNav = () => {
             <SchoolIcon />
             <p className="description group-hover:block">Schools</p>
           </NavLink>
-          <NavLink to="/classrooms" className="nav-con__top-link group">
-            <ClassroomIcon />
-            <p className="description group-hover:block">Classrooms</p>
-          </NavLink>
-          <NavLink to="/students" className="nav-con__top-link group">
-            <StudentsIcon />
-            <p className="description group-hover:block">Students</p>
-          </NavLink>
-          <NavLink to="/payments" className="nav-con__top-link group">
-            <PaymentsIcon />
-            <p className="description group-hover:block">Payments</p>
-          </NavLink>
+          {currentSchool && (
+            <NavLink to="/classrooms" className="nav-con__top-link group">
+              <ClassroomIcon />
+              <p className="description group-hover:block">Classrooms</p>
+            </NavLink>
+          )}
+          {currentSchool && (
+            <NavLink to="/students" className="nav-con__top-link group">
+              <StudentsIcon />
+              <p className="description group-hover:block">Students</p>
+            </NavLink>
+          )}
+          {currentSchool && (
+            <NavLink to="/payments" className="nav-con__top-link group">
+              <PaymentsIcon />
+              <p className="description group-hover:block">Payments</p>
+            </NavLink>
+          )}
         </div>
       </div>
 

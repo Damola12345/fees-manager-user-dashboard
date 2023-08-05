@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import FileDB from "../FileDB/methods/DBMethods";
-import { getLocalStorageItem } from "../utils/index.";
+import { getLocalStorageItem, setLocalStorageItems } from "../utils/index.";
 
 const DATABASE = process.env.REACT_APP_DATABASE;
 
@@ -23,6 +23,11 @@ export const DashboardProvider = ({ children }) => {
   });
   const [searchObjects, setSearchObjects] = useState([]);
   const [isLoading, setIsloading] = useState(false);
+
+  const setSchool = (school) => {
+    setCurrentSchool(school);
+    setLocalStorageItems("currentSchool", school);
+  };
 
   useMemo(async () => {
     setIsloading(true);
@@ -83,7 +88,7 @@ export const DashboardProvider = ({ children }) => {
         reload,
         setReload,
         currentSchool,
-        setCurrentSchool,
+        setCurrentSchool: setSchool,
         isLoading,
       }}
     >

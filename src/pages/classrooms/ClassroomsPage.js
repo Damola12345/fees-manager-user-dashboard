@@ -1,7 +1,6 @@
 import { Loader } from "../../components/Loader/Loader";
 import { ReactComponent as PlusIcon } from "../../assets/svg/plus.svg";
-import { ReactComponent as SchoolsIcon } from "../../assets/svg/schools.svg";
-import { useDashboard } from "../../contexts/DashboardContext";
+import { ReactComponent as ClassroomsIcon } from "../../assets/svg/classrooms.svg";
 import { useNavigate } from "react-router-dom";
 import DisplayButton from "../../components/DisplayCard/DisplayButton";
 import DisplayCard from "../../components/DisplayCard/DisplayCard";
@@ -12,24 +11,23 @@ import React, { useEffect, useState } from "react";
 
 const DATABASE = process.env.REACT_APP_DATABASE;
 
-const SchoolsPage = () => {
+const ClassroomsPage = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const [schools, setSchools] = useState([]);
-  const { setCurrentSchool } = useDashboard();
+  const [classrooms, setClassrooms] = useState([]);
 
-  const getSchools = async () => {
+  const getClassrooms = async () => {
     // For file database system
     if (DATABASE === "LOCAL_STORAGE") {
       setIsLoading(true);
-      const schools = await FileDB.get("schools", null, "browser");
-      setSchools(schools);
+      const classrooms = await FileDB.get("classrooms", null, "browser");
+      setClassrooms(classrooms);
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    getSchools();
+    getClassrooms();
   }, []);
 
   return (
@@ -39,10 +37,10 @@ const SchoolsPage = () => {
         cta={
           <button
             className="standard-btn-1 w-[300px]"
-            onClick={() => navigate("/register-school")}
+            onClick={() => navigate("/register-classroom")}
           >
             <PlusIcon />
-            Register school
+            Add Classroom
           </button>
         }
       />
@@ -51,23 +49,21 @@ const SchoolsPage = () => {
           <Loader loadingText={"Loading..."} />
         ) : (
           <div className="school-page__con">
-            <h2 className="heading">Select school to manage</h2>
             <div className="school-list">
-              {schools.map((sch) => {
+              {classrooms.map((cls) => {
                 return (
                   <div
-                    key={sch._id}
+                    key={cls._id}
                     onClick={() => {
-                      setCurrentSchool(sch);
-                      navigate("/schools/" + sch._id);
+                      navigate("/classrooms/" + cls._id);
                     }}
                   >
                     <DisplayCard>
                       <DisplayIcon>
-                        <SchoolsIcon />
+                        <ClassroomsIcon />
                       </DisplayIcon>
-                      <p className="text-sm">{sch.name}</p>
-                      <DisplayButton>View School</DisplayButton>
+                      <p className="text-sm">{cls.name}</p>
+                      <DisplayButton>View classroom</DisplayButton>
                     </DisplayCard>
                   </div>
                 );
@@ -80,4 +76,4 @@ const SchoolsPage = () => {
   );
 };
 
-export default SchoolsPage;
+export default ClassroomsPage;
