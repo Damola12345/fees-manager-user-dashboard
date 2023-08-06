@@ -1,0 +1,112 @@
+.detail-view {
+  @apply w-full flex flex-col gap-10 pb-20;
+
+  &__display {
+    @apply w-full bg-white p-5 xl:p-10 xl:pt-20 rounded-md;
+  }
+}
+
+.sticky-header {
+  @apply absolute w-full flex flex-wrap justify-center gap-y-3 gap-x-5 py-5 px-2 shadow-xl
+  mb-1 rounded-lg border-opacity-20 bg-white sm:gap-x-7 lg:gap-x-10;
+
+  border: 0.5px solid rgba(128, 128, 128, 0.2);
+  position: sticky;
+  top: 80px;
+  z-index: 99999;
+
+  @media screen and (min-width: 1720px) {
+    column-gap: 100px;
+  }
+}
+
+.table {
+  @apply w-full flex flex-col gap-20 items-center text-purple transition-all ease-in ease-out duration-300;
+
+  &__heading {
+    @apply flex flex-col sm:flex-row items-center gap-5;
+
+    h1 {
+      @apply font-extrabold text-2xl md:text-3xl px-5 truncate overflow-ellipsis;
+
+      min-width: 250px;
+      flex-wrap: nowrap;
+
+      @media screen and (min-width: 767px) {
+        min-width: 350px;
+      }
+    }
+  }
+
+  .show-hide-btn {
+    @apply bg-white text-midPurple rounded-md mt-10 mb-2 shadow-lg flex flex-row justify-between px-2
+    items-center transition-transform duration-200;
+
+    border: 0.5px solid rgba(128, 128, 128, 0.5);
+    height: 30px;
+    width: 110px;
+    font-size: 12px;
+    z-index: 99;
+
+    svg {
+      fill: #680e4b;
+      width: 15px;
+      height: 15px;
+    }
+  }
+}
+
+.delete-modal {
+  @apply w-full flex flex-col px-5 py-7 gap-3;
+
+  width: 350px;
+
+  &__heading {
+    @apply uppercase text-lg font-bold text-center;
+
+    span {
+      @apply text-red font-extrabold;
+    }
+  }
+
+  &__text {
+    @apply mt-1 text-14 text-red text-center;
+  }
+}
+
+.table-row {
+  @apply w-full px-3 md:py-7 py-4 bg-white grid content-center md:flex md:flex-row md:justify-between md:w-full;
+
+  min-height: 70px;
+  border: 0.5px solid #d8d8d8;
+  border-top: none;
+
+  &__title {
+    @apply w-full text-justify md:p-0 capitalize md:ml-5 md:my-auto;
+
+    color: #5d5d5d;
+
+    @media screen and (min-width: 767px) {
+      width: 40%;
+    }
+
+    @media screen and (min-width: 1024px) {
+      width: 30%;
+    }
+  }
+
+  &__description {
+    @apply mb-2 p-2 break-all md:p-0 md:m-0 rounded-sm text-sm md:my-auto;
+
+    background-color: whitesmoke;
+
+    @media screen and (min-width: 767px) {
+      width: 60%;
+      background-color: white;
+    }
+
+    @media screen and (min-width: 1024px) {
+      width: 70%;
+    }
+  }
+}

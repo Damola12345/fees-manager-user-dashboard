@@ -21,6 +21,7 @@ import RegsisterSchoolPage from "../schools/RegisterSchoolPage";
 import DashboardLayout from "../../layouts/dashboard/DashboardLayout";
 
 export const Home = () => {
+  document.title = "Fees Manager | Home";
   return (
     <DashboardLayout>
       <HomePage />
@@ -29,6 +30,7 @@ export const Home = () => {
 };
 
 export const Login = () => {
+  document.title = "Fees Manager | Login";
   return (
     <AuthLayout>
       <LoginPage />
@@ -37,6 +39,7 @@ export const Login = () => {
 };
 
 export const Signup = () => {
+  document.title = "Fees Manager | Signup";
   return (
     <AuthLayout>
       <SignupPage />
@@ -45,6 +48,7 @@ export const Signup = () => {
 };
 
 export const Verify = () => {
+  document.title = "Fees Manager | Verify Account";
   return (
     <div>
       <VerifyEmailPage />
@@ -53,6 +57,7 @@ export const Verify = () => {
 };
 
 export const ResetPassword = () => {
+  document.title = "Fees Manager | Reset Password";
   return (
     <div>
       <ResetPwdPage />
@@ -61,6 +66,7 @@ export const ResetPassword = () => {
 };
 
 export const UserProfile = () => {
+  document.title = "Fees Manager | Profile";
   return (
     <div>
       <ProfilePage />
@@ -69,6 +75,7 @@ export const UserProfile = () => {
 };
 
 export const Students = () => {
+  document.title = "Fees Manager | Students";
   return (
     <DashboardLayout>
       <StudentsPage />
@@ -77,6 +84,7 @@ export const Students = () => {
 };
 
 export const RegisterStudent = () => {
+  document.title = "Fees Manager | Register student";
   return (
     <DashboardLayout>
       <RegisterStudentPage />
@@ -85,6 +93,7 @@ export const RegisterStudent = () => {
 };
 
 export const Schools = () => {
+  document.title = "Fees Manager | Schools";
   return (
     <DashboardLayout>
       <SchoolsPage />
@@ -93,6 +102,7 @@ export const Schools = () => {
 };
 
 export const RegisterSchool = () => {
+  document.title = "Fees Manager | Register school";
   return (
     <DashboardLayout>
       <RegsisterSchoolPage />
@@ -101,6 +111,7 @@ export const RegisterSchool = () => {
 };
 
 export const Classrooms = () => {
+  document.title = "Fees Manager | Classrooms";
   return (
     <DashboardLayout>
       <AllClassroomsPage />
@@ -109,6 +120,7 @@ export const Classrooms = () => {
 };
 
 export const Payments = () => {
+  document.title = "Fees Manager | Payments";
   return (
     <DashboardLayout>
       <PaymentsPage />
@@ -117,6 +129,7 @@ export const Payments = () => {
 };
 
 export const MakePayment = () => {
+  document.title = "Fees Manager | Make payment";
   return (
     <DashboardLayout>
       <CreatePaymentPage />
@@ -125,6 +138,7 @@ export const MakePayment = () => {
 };
 
 export const RegisterClassroom = () => {
+  document.title = "Fees Manager | Register Classroom";
   return (
     <DashboardLayout>
       <RegisterClassroomPage />
@@ -135,6 +149,7 @@ export const RegisterClassroom = () => {
 export const ViewSchool = () => {
   const schoolId = window.location.pathname.split("/")[2];
   let queryObj = { resource: "schools", filter: schoolId };
+  document.title = "Fees Manager | View school";
 
   return (
     <DashboardLayout>
@@ -145,6 +160,7 @@ export const ViewSchool = () => {
 
 export const ViewClassroom = () => {
   //Use the student id to query the api
+  document.title = "Fees Manager | View classroom";
   const { className } = useParams();
   let queryObj = {
     resource: "classrooms",
@@ -160,6 +176,7 @@ export const ViewClassroom = () => {
 
 export const ViewStudent = () => {
   //Use the student id to query the api
+  document.title = "Fees Manager | View student";
   const { studentId } = useParams();
   let queryObj = { resource: "students", filter: studentId };
 
@@ -172,6 +189,7 @@ export const ViewStudent = () => {
 
 export const ViewPayment = (props) => {
   //Use the payment id to query the api
+  document.title = "Fees Manager | View payment";
   const { paymentId } = useParams();
   let queryObj = { resource: "payments", filter: paymentId };
 
@@ -184,6 +202,7 @@ export const ViewPayment = (props) => {
 
 export const EditSchoolData = () => {
   const schoolName = localStorage.currentSchool;
+  document.title = "Fees Manager | Edit school";
 
   return (
     <div>
@@ -194,6 +213,7 @@ export const EditSchoolData = () => {
 
 export const EditClassroomData = () => {
   const { className } = useParams();
+  document.title = "Fees Manager | Edit classroom";
 
   return (
     <div>
@@ -204,6 +224,7 @@ export const EditClassroomData = () => {
 
 export const EditStudentData = () => {
   const { studentId } = useParams();
+  document.title = "Fees Manager | Edit student";
 
   return (
     <div>

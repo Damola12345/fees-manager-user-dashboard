@@ -3,7 +3,7 @@ import { ReactComponent as RightArrow } from "../../assets/svg/right-arrow.svg";
 const PageHeader = ({ previousPath, cta }) => {
   const navigate = useNavigate();
   return (
-    <div className="w-full mb-20 flex items-start justify-between">
+    <div className="w-full mb-5 flex items-start justify-between">
       <button onClick={() => navigate(previousPath)}>
         <RightArrow
           className="-rotate-[180deg]"

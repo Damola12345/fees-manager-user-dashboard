@@ -11,7 +11,7 @@
     @apply bg-midPurple;
   }
   &:hover {
-    @apply opacity-100 bg-purple;
+    @apply opacity-100;
   }
   &.no-bg {
     @apply bg-white border-purple border-[1px] text-black-400;
