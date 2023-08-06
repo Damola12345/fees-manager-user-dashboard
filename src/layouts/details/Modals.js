@@ -1,9 +1,10 @@
 import { useFormik } from "formik";
+import { useNavigate } from "react-router";
 import { useState } from "react";
-import ReactModal from "react-modal";
 import * as Yup from "yup";
 import FileDB from "../../FileDB/methods/DBMethods";
-import { useNavigate } from "react-router";
+import InputText from "../../components/inputText/InputText";
+import ReactModal from "react-modal";
 
 // Styles for modal
 const customStyles = {
@@ -39,16 +40,13 @@ export const DeleteModal = ({ obj, itemType, modalIsOpen, setModalIsOpen }) => {
     validationSchema: Yup.object({
       password: Yup.string().required("Password is required."),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async () => {
       setIsDeleting(true);
       const response = await FileDB.del(itemType, { _id: obj._id });
       console.log(response);
       if (response === "ok") {
         navigate(`/${itemType}`);
       }
-      //setIsDeleting(true);
-      //await createSchool(values);
-      //formik.resetForm();
     },
   });
 
@@ -60,39 +58,37 @@ export const DeleteModal = ({ obj, itemType, modalIsOpen, setModalIsOpen }) => {
       ariaHideApp={false}
       shouldCloseOnOverlayClick={true}
       contentLabel="Terminate school Modal"
-      className="absolute bg-white "
-      //parentSelector={() => document.querySelector(".block-app")}
+      className="absolute bg-white"
     >
-      <form
-        className="w-full sm:w-[350px] flex flex-col px-5 py-7 gap-5"
-        onSubmit={formik.handleSubmit}
-      >
+      <form className="delete-modal" onSubmit={formik.handleSubmit}>
         <div className="self-center">
-          <label htmlFor="password" className="pl-1 flex flex-row gap-1">
-            Password
-            <span className={`text-[red]`}>*</span>
-          </label>
-
-          <p className="mt-1 text-[14px] text-[red] text-center">
+          <h2 className="delete-modal__heading">
+            warning<span>!</span>
+          </h2>
+          <p className="delete-modal__text">
             {itemType === "schools" &&
-              `You are about to delete all records, including classrooms and students for ${obj?.name}.`}
+              `You are about to delete all records, including classrooms and students for ${
+                obj?.name || obj?.fullname
+              }.`}
           </p>
         </div>
         <div className="w-full">
-          <input
-            type={"text"}
+          <InputText
+            value={formik.values.password}
+            setValue={formik.handleChange}
+            id={"password"}
+            name={"password"}
+            label={"Enter password"}
             onChange={formik.handleChange}
-            id="password"
-            name="password"
-            onBlur={formik.handleBlur}
-            className="w-full block h-[50px] px-4 rounded-[8px] text-[16px] border-[1px] border-[#1212124d] outline-none"
+            placeholder={"Password"}
+            isInvalid={formik.errors.password}
+            className={"w-full"}
+            inputClassName={"w-full"}
+            errorText={formik.errors?.password}
           />
-          {formik.touched.password && formik.errors.password && (
-            <p className="text-sm text-[red]">{formik.errors.password}</p>
-          )}
           <button
             type="submit"
-            className="w-full bg-midPurple py-2 text-white rounded-[5px] text-sm font-bold mt-5"
+            className="standard-btn-1 w-full mt-5"
             disabled={isDeleting}
           >
             {isDeleting ? "..." : "Delete"}
