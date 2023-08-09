@@ -44,7 +44,7 @@ const ClassroomsPage = () => {
           </button>
         }
       />
-      <div className="w-full flex items-center justify-center">
+      <div className="w-full flex items-center justify-center mt-5">
         {isLoading ? (
           <Loader loadingText={"Loading..."} />
         ) : (

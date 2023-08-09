@@ -51,7 +51,7 @@ const InputText = ({
           onFocus={() => setInputFocus(true)}
           onBlur={() => {
             setInputFocus(false);
-            onBlur();
+            onBlur && onBlur();
           }}
           readOnly={readOnly}
         />

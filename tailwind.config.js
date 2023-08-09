@@ -95,7 +95,7 @@ module.exports = {
         DEFAULT: "#ffffff",
       },
       grey: {
-        DEFAULT: "rgba(255, 255, 255, 0.6)",
+        DEFAULT: "#717171",
         100: "#717171",
         200: "#F8F8FB",
         300: "rgba(18, 18, 18, 0.6)",

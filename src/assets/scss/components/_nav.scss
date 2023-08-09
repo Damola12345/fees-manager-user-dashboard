@@ -15,12 +15,20 @@
       }
     }
     &-link {
-      @apply w-full relative h-14 flex items-center justify-center;
+      @apply w-full relative h-13 flex items-center justify-center;
 
       border-bottom: 0.5px solid white;
 
       .description {
         @apply absolute left-[100%] ml-5 hidden bg-midPurple text-white text-14 rounded-md px-2 py-1;
+      }
+
+      .item {
+        @apply h-9 w-9 rounded-md flex items-center justify-center;
+
+        &.active {
+          @apply bg-midPurple;
+        }
       }
 
       svg {
@@ -30,13 +38,22 @@
       }
     }
   }
+
   &__bottom {
     @apply mb-10;
     &-link {
-      @apply w-full relative h-14 flex items-center justify-center;
+      @apply w-full relative h-13 flex items-center justify-center;
 
       .description {
         @apply absolute left-[100%] ml-5 hidden bg-midPurple text-white text-14 rounded-md px-2 py-1;
+      }
+
+      .item {
+        @apply h-9 w-9 rounded-md flex items-center justify-center;
+
+        &.active {
+          @apply bg-midPurple;
+        }
       }
     }
 
