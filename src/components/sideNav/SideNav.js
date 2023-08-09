@@ -21,39 +21,49 @@ const SideNav = () => {
         </NavLink>
 
         <div className="mt-5">
-          <NavLink to="/schools" className="nav-con__top-link group">
-            <SchoolIcon />
-            <p className="description group-hover:block">Schools</p>
-          </NavLink>
-          {currentSchool && (
-            <NavLink to="/classrooms" className="nav-con__top-link group">
-              <ClassroomIcon />
-              <p className="description group-hover:block">Classrooms</p>
+          <div className="nav-con__top-link">
+            <NavLink to="/schools" className="item group">
+              <SchoolIcon />
+              <p className="description group-hover:block">Schools</p>
             </NavLink>
+          </div>
+          {currentSchool && (
+            <div className="nav-con__top-link">
+              <NavLink to="/classrooms" className="item group">
+                <ClassroomIcon />
+                <p className="description group-hover:block">Classrooms</p>
+              </NavLink>
+            </div>
           )}
           {currentSchool && (
-            <NavLink to="/students" className="nav-con__top-link group">
-              <StudentsIcon />
-              <p className="description group-hover:block">Students</p>
-            </NavLink>
+            <div className="nav-con__top-link">
+              <NavLink to="/students" className="item group">
+                <StudentsIcon />
+                <p className="description group-hover:block">Students</p>
+              </NavLink>
+            </div>
           )}
           {currentSchool && (
-            <NavLink to="/payments" className="nav-con__top-link group">
-              <PaymentsIcon />
-              <p className="description group-hover:block">Payments</p>
-            </NavLink>
+            <div className="nav-con__top-link">
+              <NavLink to="/payments" className="item group">
+                <PaymentsIcon />
+                <p className="description group-hover:block">Payments</p>
+              </NavLink>
+            </div>
           )}
         </div>
       </div>
 
       <div className="nav-con__bottom">
-        <NavLink
-          to="/profile"
-          className="nav-con__bottom-link group border-b-[0.5px] border-b-white"
-        >
-          <ProfileIcon />
-          <p className="description group-hover:block">Profile</p>
-        </NavLink>
+        <div className="nav-con__bottom-link">
+          <NavLink
+            to="/profile"
+            className="nav-con__bottom-link group border-b-[0.5px] border-b-white"
+          >
+            <ProfileIcon />
+            <p className="description group-hover:block">Profile</p>
+          </NavLink>
+        </div>
         <button
           type="button"
           className="nav-con__bottom-link group"

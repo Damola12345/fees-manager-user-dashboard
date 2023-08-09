@@ -1,0 +1,33 @@
+.students {
+  @apply relative flex flex-col items-center pb-20;
+
+  &__header {
+    @apply sticky top-20 flex flex-col py-2 w-full bg-white rounded-t-md mx-5 mt-5;
+
+    /* border: 0.5px solid rgba(128, 128, 128, 0.2); */
+    border-bottom: none;
+
+    &-filters {
+      @apply w-full my-4 mt-7 mb-10 px-5 md:px-10 flex items-start justify-between;
+
+      min-height: 40px;
+
+      .dropdown {
+        @apply bg-white absolute top-8 right-0 rounded-md shadow-md border border-grey border-opacity-20 p-7;
+
+        width: 200px;
+        min-height: 200px;
+      }
+    }
+  }
+
+  &__list {
+    @apply w-full;
+
+    /* border: 0.5px solid rgba(128, 128, 128, 0.1); */
+  }
+
+  &__pagination {
+    @apply w-full h-20 bg-white rounded-b-md;
+  }
+}
