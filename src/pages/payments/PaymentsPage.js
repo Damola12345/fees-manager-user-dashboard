@@ -1,18 +1,16 @@
-import { alertMessage } from "../../GlobalFunctions/GlobalFunctions";
 import { getDate, money } from "../../GlobalFunctions/GlobalFunctions";
 import { Loader } from "../../components/Loader/Loader";
-import { useNavigate } from "react-router-dom";
-import { useSearchParams } from "react-router-dom";
-import React, { useState, useEffect } from "react";
-import { ScrollOption } from "../students/StudentsPage";
-import FileDB from "../../FileDB/methods/DBMethods";
-import PageHeader from "../../components/pageHeader/PageHeader";
-import InputText from "../../components/inputText/InputText";
-import { ReactComponent as PlusIcon } from "../../assets/svg/plus.svg";
-import { ReactComponent as FilterIcon } from "../../assets/svg/filter.svg";
 import { ReactComponent as CaretDown } from "../../assets/svg/caret-down.svg";
+import { ReactComponent as FilterIcon } from "../../assets/svg/filter.svg";
+import { ReactComponent as PlusIcon } from "../../assets/svg/plus.svg";
+import { ScrollOption } from "../students/StudentsPage";
+import { useDashboard } from "../../contexts/DashboardContext";
+import { useNavigate } from "react-router-dom";
+import FileDB from "../../FileDB/methods/DBMethods";
+import InputText from "../../components/inputText/InputText";
+import PageHeader from "../../components/pageHeader/PageHeader";
+import React, { useState, useEffect } from "react";
 
-const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
 const DATABASE = process.env.REACT_APP_DATABASE;
 
 const PaymentsPage = () => {
@@ -20,19 +18,25 @@ const PaymentsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [payments, setPayments] = useState([]);
   const [paymentList, setPaymentList] = useState([]);
-  //const [searchText, setSearchText] = useState('');
   const [classnames, setClassnames] = useState([]);
   const [checkedClassrooms, setCheckedClassrooms] = useState([]);
-  const [searchParams] = useSearchParams();
-  const [classroom] = useState(searchParams.get("classroom"));
   const [filterActive, setFilterActive] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const { currentSchool } = useDashboard();
 
   const getPayments = async () => {
     if (DATABASE === "LOCAL_STORAGE") {
       setIsLoading(true);
-      const payments = await FileDB.get("payments", null, "browser");
-      const classrooms = await FileDB.get("classrooms", null, "browser");
+      const payments = await FileDB.get(
+        "payments",
+        { schoolId: currentSchool?._id },
+        "browser"
+      );
+      const classrooms = await FileDB.get(
+        "classrooms",
+        { schoolId: currentSchool?._id },
+        "browser"
+      );
       const classList = classrooms.sort().map((cls) => {
         return cls.name;
       });
@@ -44,10 +48,6 @@ const PaymentsPage = () => {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    getPayments();
-  }, []);
 
   const SearchPayment = (event) => {
     setSearchText(event.target.value);
@@ -101,6 +101,10 @@ const PaymentsPage = () => {
   };
 
   useEffect(() => {
+    getPayments();
+  }, [currentSchool]);
+
+  useEffect(() => {
     !searchText && SearchPayment({ target: { value: "" } });
   }, [searchText]);
 
@@ -111,14 +115,14 @@ const PaymentsPage = () => {
         cta={
           <button
             className="standard-btn-1 w-[300px]"
-            onClick={() => navigate("/make-payment")}
+            onClick={() => navigate("/payments/create")}
           >
             <PlusIcon />
             Make payment
           </button>
         }
       />
-      {!isLoading && (
+      {!isLoading && payments.length > 0 && (
         <div className="students__header">
           <div className="students__header-filters">
             <InputText
@@ -198,34 +202,49 @@ const PaymentsPage = () => {
           />
         </div>
       )}
-      <div className="students__list">
-        {isLoading ? (
-          <Loader loadingText={"Loading..."} />
-        ) : paymentList ? (
-          paymentList.map((payment) => {
-            return (
-              <div
-                key={payment._id}
-                onClick={() => {
-                  navigate(`/payments/${String(payment._id)}`);
-                }}
-              >
-                <ScrollOption
+      {!isLoading && payments.length === 0 ? (
+        <div className="empty-state">
+          <h1 className="heading">
+            There are no payments made to {currentSchool?.name}.
+          </h1>
+          <button
+            className="standard-btn-1 w-full max-w-[350px]"
+            onClick={() => navigate("/payments/create")}
+          >
+            <PlusIcon />
+            Make payment
+          </button>
+        </div>
+      ) : (
+        <div className="students__list">
+          {isLoading ? (
+            <Loader loadingText={"Loading..."} />
+          ) : paymentList ? (
+            paymentList.map((payment) => {
+              return (
+                <div
                   key={payment._id}
-                  one={payment.studentName}
-                  two={payment.depositorName}
-                  three={money(payment.amount)}
-                  four={payment.purpose}
-                  five={getDate(payment.createdAt)}
-                  header={false}
-                />
-              </div>
-            );
-          })
-        ) : (
-          <div></div>
-        )}
-      </div>
+                  onClick={() => {
+                    navigate(`/payments/${String(payment._id)}`);
+                  }}
+                >
+                  <ScrollOption
+                    key={payment._id}
+                    one={payment.studentName}
+                    two={payment.depositorName}
+                    three={money(payment.amount)}
+                    four={payment.purpose}
+                    five={getDate(payment.createdAt)}
+                    header={false}
+                  />
+                </div>
+              );
+            })
+          ) : (
+            <div></div>
+          )}
+        </div>
+      )}
       {paymentList?.length > 0 && <div className="students__pagination"></div>}
     </section>
   );

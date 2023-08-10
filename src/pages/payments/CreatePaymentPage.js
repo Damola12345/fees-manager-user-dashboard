@@ -87,7 +87,11 @@ const CreatePaymentPage = () => {
   const getStudents = async () => {
     if (DATABASE === "LOCAL_STORAGE") {
       setIsLoading(true);
-      const students = await FileDB.get("students", null, "browser");
+      const students = await FileDB.get(
+        "students",
+        { schoolId: currentSchool?._id },
+        "browser"
+      );
       setStudents(students);
       setStudentList(students);
       setIsLoading(false);
@@ -174,7 +178,7 @@ const CreatePaymentPage = () => {
 
   useEffect(() => {
     getStudents();
-  }, []);
+  }, [currentSchool]);
 
   return (
     <div className="pb-20">

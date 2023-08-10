@@ -22,3 +22,15 @@
     }
   }
 }
+
+.empty-state {
+  @apply bg-white w-full rounded-md flex flex-col items-center justify-center mt-5 gap-7 p-7 md:p-10 xl:p-20;
+
+  height: 65vh;
+
+  .heading {
+    @apply text-xl md:text-3xl font-extrabold text-purple text-center;
+
+    max-width: 500px;
+  }
+}

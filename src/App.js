@@ -74,7 +74,7 @@ function App() {
             />
 
             <Route path="/payments" element={<Payments />} />
-            <Route path="/make-payment" element={<MakePayment />} />
+            <Route path="/payments/create" element={<MakePayment />} />
             <Route
               path="/payments/:paymentId"
               element={<ViewPayment /* id={studentName} */ />}
