@@ -37,18 +37,19 @@ const ClassroomsPage = () => {
         cta={
           <button
             className="standard-btn-1 w-[300px]"
-            onClick={() => navigate("/register-classroom")}
+            onClick={() => navigate("/classrooms/register")}
           >
             <PlusIcon />
             Add Classroom
           </button>
         }
       />
-      <div className="w-full flex items-center justify-center mt-5">
+      <div className="w-full flex items-center justify-center">
         {isLoading ? (
           <Loader loadingText={"Loading..."} />
         ) : (
           <div className="school-page__con">
+            <h2 className="heading">Select classroom</h2>
             <div className="school-list">
               {classrooms.map((cls) => {
                 return (

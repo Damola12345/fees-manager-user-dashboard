@@ -39,7 +39,7 @@ const SchoolsPage = () => {
         cta={
           <button
             className="standard-btn-1 w-[300px]"
-            onClick={() => navigate("/register-school")}
+            onClick={() => navigate("/schools/register")}
           >
             <PlusIcon />
             Register school

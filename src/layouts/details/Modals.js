@@ -43,7 +43,6 @@ export const DeleteModal = ({ obj, itemType, modalIsOpen, setModalIsOpen }) => {
     onSubmit: async () => {
       setIsDeleting(true);
       const response = await FileDB.del(itemType, { _id: obj._id });
-      console.log(response);
       if (response === "ok") {
         navigate(`/${itemType}`);
       }

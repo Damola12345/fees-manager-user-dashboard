@@ -147,7 +147,7 @@ const Header = () => {
                     navigate("/profile");
                   }}
                 >
-                  <div className="icon-con rounded-tl-lg">
+                  <div className="icon-con border-b-[0.5px] border-b-white rounded-tl-lg">
                     <ProfileIcon height={15} width={15} fill="white" />
                   </div>
                   <div className="text-con group-hover:bg-[whitesmoke] ">

@@ -4,7 +4,6 @@
   &__header {
     @apply sticky top-20 flex flex-col py-2 w-full bg-white rounded-t-md mx-5 mt-5;
 
-    /* border: 0.5px solid rgba(128, 128, 128, 0.2); */
     border-bottom: none;
 
     &-filters {
@@ -22,12 +21,28 @@
   }
 
   &__list {
-    @apply w-full;
+    @apply w-full bg-white rounded-md;
 
-    /* border: 0.5px solid rgba(128, 128, 128, 0.1); */
+    min-height: 50vh;
   }
 
   &__pagination {
     @apply w-full h-20 bg-white rounded-b-md;
+  }
+}
+
+.register-student {
+  @apply flex flex-col items-center mt-10 bg-white rounded-md p-6 md:p-10 xl:p-20;
+
+  min-height: 70vh;
+
+  &__heading {
+    @apply text-2xl font-extrabold text-purple;
+  }
+
+  &__form {
+    @apply w-full flex flex-col items-center gap-6 mt-10;
+
+    max-width: 650px;
   }
 }

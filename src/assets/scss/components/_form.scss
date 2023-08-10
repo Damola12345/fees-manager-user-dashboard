@@ -75,3 +75,58 @@ select:-webkit-autofill:focus {
 .signup-form {
   @apply flex flex-col gap-4;
 }
+
+.standard-dropdown-1 {
+  .label {
+    @apply text-14;
+    margin-bottom: 6px;
+  }
+  .button {
+    @apply relative w-full flex justify-between px-4 items-center text-16;
+    height: 60px;
+    border-radius: 12px;
+    color: #8b8d90;
+
+    .display-text {
+      @apply flex items-center;
+      gap: 2px;
+
+      svg {
+        width: 30px;
+      }
+    }
+
+    &__options {
+      @apply w-full absolute left-0 bg-white py-4 px-4 text-16 text-black font-extrabold flex flex-col justify-center overflow-scroll;
+      top: 68px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.06);
+      z-index: 999;
+      max-height: 300px;
+
+      &-item {
+        @apply w-full flex gap-1 items-center;
+        height: 40px;
+        min-height: 40px;
+
+        svg {
+          width: 30px;
+        }
+      }
+    }
+  }
+
+  .error {
+    @apply flex items-center text-14 text-red;
+    gap: 2px;
+    margin-top: 6px;
+
+    .err-icon {
+      @apply flex items-center justify-center bg-red rounded-full text-white;
+      font-size: 12px;
+      font-weight: 500;
+      width: 17px;
+      height: 17px;
+    }
+  }
+}

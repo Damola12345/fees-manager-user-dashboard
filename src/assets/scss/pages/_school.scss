@@ -13,3 +13,19 @@
     }
   }
 }
+
+.register-school {
+  @apply flex flex-col items-center mt-10 bg-white rounded-md p-6 md:p-10 xl:p-20;
+
+  min-height: 70vh;
+
+  &__heading {
+    @apply text-2xl font-extrabold text-purple;
+  }
+
+  &__form {
+    @apply w-full flex flex-col items-center gap-6 mt-10;
+
+    max-width: 650px;
+  }
+}
