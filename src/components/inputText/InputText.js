@@ -12,6 +12,7 @@ const InputText = ({
   placeholder,
   isInvalid,
   type,
+  inputType,
   name,
   label,
   id,
@@ -43,7 +44,7 @@ const InputText = ({
           ref={ref}
           name={name}
           id={id}
-          type="text"
+          type={inputType || "text"}
           placeholder={placeholder}
           className={`input ${inputClassName}`}
           value={value}

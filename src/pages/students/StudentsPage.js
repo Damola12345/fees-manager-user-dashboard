@@ -172,7 +172,7 @@ const StudentsPage = () => {
         cta={
           <button
             className="standard-btn-1 w-[300px]"
-            onClick={() => navigate("/register-student")}
+            onClick={() => navigate("/students/register")}
           >
             <PlusIcon />
             Add student

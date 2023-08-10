@@ -42,14 +42,17 @@ function App() {
             <Route path="/profile" element={<UserProfile />} />
 
             <Route path="/schools" element={<Schools />} />
-            <Route path="/register-school" element={<RegisterSchool />} />
+            <Route path="/schools/register" element={<RegisterSchool />} />
             <Route path="/schools/:schoolName" element={<ViewSchool />} />
             <Route
               path="/schools/:schoolName/edit"
               element={<EditSchoolData />}
             />
 
-            <Route path="/register-classroom" element={<RegisterClassroom />} />
+            <Route
+              path="/classrooms/register"
+              element={<RegisterClassroom />}
+            />
             <Route path="/classrooms" element={<Classrooms />} />
             <Route path="/classrooms/:className" element={<ViewClassroom />} />
             <Route
@@ -57,7 +60,7 @@ function App() {
               element={<EditClassroomData />}
             />
 
-            <Route path="/register-student" element={<RegisterStudent />} />
+            <Route path="/students/register" element={<RegisterStudent />} />
             <Route path="/students" element={<Students />} />
             <Route
               path="/students/:studentId"

@@ -7,6 +7,7 @@ import { StickyHeader } from "../../layouts/details/InfoTable";
 import { config } from "../../app.config";
 import { DeleteModal } from "../../layouts/details/Modals";
 import { useState } from "react";
+import { useDashboard } from "../../contexts/DashboardContext";
 
 const StudentDetails = (props) => {
   const data = props.data;
@@ -15,6 +16,7 @@ const StudentDetails = (props) => {
   const navigate = useNavigate();
   const { midPurple } = config.color;
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const { currentSchool } = useDashboard();
 
   const StudentOptions = (
     <StickyHeader>
@@ -52,7 +54,7 @@ const StudentDetails = (props) => {
     { "Total Fees paid": `NGN ${money(data.totalPaidFees)}` },
     { "Total Fees Expected": `NGN ${money(data.totalFeesExpected)}` },
     { "Student ID": data._id },
-    { School: localStorage.currentSchool },
+    { School: currentSchool?.name },
     { "Date created": getDate(data.createdAt, true) },
     { "Last updated": getDate(data.updatedAt, true) },
   ];

@@ -1,30 +1,43 @@
-import "./RegisterSchoolPage.css";
-import { alertMessage } from "../../GlobalFunctions/GlobalFunctions";
-import { Loader } from "../../components/Loader/Loader";
-import { useNavigate } from "react-router-dom";
-import { useState, useRef } from "react";
-import BigBtn from "../../components/BigBtn/BigBtn";
-import PreviousIcon from "../../components/PreviousIcon/PreviousIcon";
-import React from "react";
-import SelectionDropdown from "../../components/SelectionDropdown/SelectionDropdown";
+import { alertSuccess } from "../../GlobalFunctions/GlobalFunctions";
 import { useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import * as Yup from "yup";
-import { Toaster } from "react-hot-toast";
-import {
-  alertError,
-  alertSuccess,
-} from "../../GlobalFunctions/GlobalFunctions";
-import { getLocalStorageItem } from "../../utils/index.";
+import Dropdown from "../../components/dropdown/Dropdown";
 import FileDB from "../../FileDB/methods/DBMethods";
+import InputText from "../../components/inputText/InputText";
+import PageHeader from "../../components/pageHeader/PageHeader";
+import ReactModal from "react-modal";
 
-const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
 const DATABASE = process.env.REACT_APP_DATABASE;
 
 const RegsisterSchoolPage = () => {
   const navigate = useNavigate();
-  const itemsRef = useRef();
   const [isLoading, setIsLoading] = useState(false);
-  const [nextStep, setNextStep] = useState(false);
+  const [levelDropdownOpen, setLevelDropdownOpen] = useState(false);
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+
+  // Styles for modal
+  const customStyles = {
+    overlay: {
+      position: "fixed",
+      top: 0,
+      right: 0,
+      bottom: 0,
+      opacity: "1",
+      backgroundColor: "#00000087",
+      zIndex: 99999999999,
+    },
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      borderRadius: "8px",
+    },
+  };
 
   const createSchool = async (values) => {
     setIsLoading(true);
@@ -32,8 +45,7 @@ const RegsisterSchoolPage = () => {
     const address = values.schoolAddress;
     const level = values.level;
     const password = values.password;
-    const classrooms = itemsRef.current.getItems();
-    const schInfo = { name, address, level, password, classrooms };
+    const schInfo = { name, address, level, password };
 
     if (DATABASE === "LOCAL_STORAGE") {
       const response = await FileDB.post("schools", schInfo);
@@ -43,37 +55,6 @@ const RegsisterSchoolPage = () => {
         navigate("/schools");
       }
     }
-
-    /* fetch(`${BACKEND_HOST}/create-school`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: schInfo,
-    })
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((message) => {
-            alertSuccess(message.success);
-            setTimeout(() => {
-              setIsLoading(false);
-              navigate("/schools");
-            }, 2000);
-          });
-        } else if (response.status === 401) {
-          navigate("/login");
-        } else {
-          response.json().then((message) => {
-            setIsLoading(false);
-            alertError(message.error);
-          });
-        }
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        alertError(err);
-      }); */
   };
 
   const formik = useFormik({
@@ -83,183 +64,139 @@ const RegsisterSchoolPage = () => {
       schoolAddress: "",
       level: "",
       classrooms: [],
-      password: "",
     },
     validationSchema: Yup.object({
       schoolName: Yup.string()
         .required("School name is required")
-        .min(5, "Name must be at least 5 characters")
-        .max(100, "Name must not exceed 100 characters"),
+        .min(5, "Minimum of 5 characters")
+        .max(100, "Maximum 100 characters"),
       schoolAddress: Yup.string()
         .required("Address is required")
-        .min(5, "Address must be at least 5 characters")
-        .max(100, "Name must not exceed 100 characters"),
+        .min(5, "Minimum 5 characters")
+        .max(100, "Maximum of 100 characters"),
       level: Yup.string().required("A level is required"),
+    }),
+    onSubmit: async () => {
+      setCreateModalOpen(true);
+    },
+  });
+
+  const finalForm = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      password: "",
+    },
+    validationSchema: Yup.object({
       password: Yup.string().required("Password is required."),
     }),
     onSubmit: async (values) => {
-      setNextStep(false);
-      setIsLoading(true);
-      await createSchool(values);
-      //formik.resetForm();
+      setCreateModalOpen(false);
+      createSchool({ ...formik.values, ...values });
     },
   });
 
   return (
-    <div className="py-20 px:10 md:px-20">
-      {/* toast message */}
-      <Toaster
-        containerStyle={{
-          position: "relative",
-        }}
-      />
-
-      <div className="pl-10 self-start">
-        <PreviousIcon path={-1} />
-      </div>
-      <div className="flex flex-col items-center mt-10">
-        <h1 className="text-4xl font-bold">Register School</h1>
-        <div>
-          <h3></h3>
-        </div>
-        <form
-          onSubmit={formik.handleSubmit}
-          className="flex flex-col items-center gap-5 mt-20 max-w-[650px]"
-        >
-          <div className="flex flex-col md:flex-row gap:5 md:gap-10 md:justify-between">
-            {/* School Name input */}
-            <div className="flex flex-col gap-1">
-              <label htmlFor="schoolName" className="pl-1 flex flex-row gap-1">
-                School Name
-                <span className={`text-[red]`}>*</span>
-              </label>
-              <input
-                type="text"
-                placeholder="School Name"
-                name="schoolName"
-                id="schoolName"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.schoolName}
-                className="px-5 py-1 xl:w-[300px] outline-[purple] border-[grey] border-[0.5px] border-opacity-90"
-              />
-              {formik.touched.schoolName && formik.errors.schoolName && (
-                <p className="text-sm text-[red]">{formik.errors.schoolName}</p>
-              )}
-            </div>
-
-            {/* School Address input */}
-            <div className="flex flex-col gap-1">
-              <label
-                htmlFor="schoolAddress"
-                className="pl-1 flex flex-row gap-1"
-              >
-                School Address
-                <span className={`text-[red]`}>*</span>
-              </label>
-              <input
-                type="text"
-                placeholder="Address"
-                name="schoolAddress"
-                id="schoolAddress"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.schoolAddress}
-                className="px-5 py-1 xl:w-[300px] outline-[purple] border-[grey] border-[0.5px] border-opacity-90"
-              />
-              {formik.touched.schoolAddress && formik.errors.schoolAddress && (
-                <p className="text-sm text-[red]">
-                  {formik.errors.schoolAddress}
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="flex flex-col self-start gap-1">
-            <label htmlFor="level" className="pl-1 text-sm">
-              Level
-              <span className="text-[red] pl-1">*</span>
-            </label>
-            <select
-              name="level"
-              value={formik.values.level}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              className="px-3 py-2 w-full xl:w-[300px] outline-none border-[grey] border-[0.5px] border-opacity-90 rounded-[5px] text-sm"
-            >
-              <option value="">Select</option>
-              <option value="Primary">Primary</option>
-              <option value="Secondary">Secondary</option>
-              <option value="Tertiary">Tertiary</option>
-              <option value="Other">Other</option>
-            </select>
-            {formik.touched.level && formik.errors.level && (
-              <p className="text-sm text-[red]">{formik.errors.level}</p>
-            )}
-          </div>
+    <div className="pb-20 ">
+      <PageHeader previousPath={"/schools"} />
+      <div className="register-school">
+        <h1 className="register-school__heading">Register School</h1>
+        <form onSubmit={formik.handleSubmit} className="register-school__form">
           <div className="w-full">
-            <p className="pl-1 pb-1 flex flex-row gap-1">
-              Classrooms
-              <span className={`text-[red]`}>*</span>
-            </p>
-            <SelectionDropdown
-              dropdownName="classrooms"
-              custom={true}
-              ref={itemsRef}
+            <InputText
+              value={formik.values.schoolName}
+              setValue={formik.handleChange}
+              id={"schoolName"}
+              name={"schoolName"}
+              label={"School name"}
+              onChange={formik.handleChange}
+              placeholder={"Name"}
+              isInvalid={formik.errors.schoolName}
+              className={"w-full"}
+              inputClassName={"w-full"}
+              errorText={formik.errors?.schoolName}
             />
           </div>
+
+          {/* School Address input */}
+          <div className="w-full">
+            <InputText
+              value={formik.values.schoolAddress}
+              setValue={formik.handleChange}
+              id={"schoolAddress"}
+              name={"schoolAddress"}
+              label={"School address"}
+              onChange={formik.handleChange}
+              placeholder={"Address"}
+              isInvalid={formik.errors.schoolAddress}
+              className={"w-full"}
+              inputClassName={"w-full"}
+              errorText={formik.errors?.schoolAddress}
+            />
+          </div>
+
+          <div className="w-full">
+            <Dropdown
+              dropdownOpen={levelDropdownOpen}
+              setDropDownOpen={setLevelDropdownOpen}
+              options={["Primary", "Secondary", "Tetiary", "Other"]}
+              value={formik.values.level}
+              onClickFunction={(value) => {
+                formik.setFieldValue("level", value);
+              }}
+              label={"Select Level"}
+              isInvalid={formik.errors.level}
+              errorText={formik.errors.level}
+            />
+          </div>
+
           <button
-            onClick={() => {
-              const errors = Object.keys(formik.errors);
-              errors.length === 1 &&
-                errors[0] === "password" &&
-                setNextStep(true);
-            }}
             type="submit"
-            className={`
-              ${isLoading ? "cursor-wait opacity-70" : "cursor-pointer"}
-              w-full bg-midPurple text-white py-3 rounded-lg mt-10
-              `}
+            disabled={isLoading}
+            className="standard-btn-1 w-full"
           >
             {isLoading ? "Creating..." : "Create School"}
           </button>
 
           {/* Password for authentication */}
-          <div
-            className={`fixed w-full h-full bg-black z-[999999999] top-0
-            flex items-center justify-center bg-black bg-opacity-40
-            ${nextStep ? "flex" : "hidden"}`}
+          <ReactModal
+            isOpen={createModalOpen}
+            onRequestClose={() => setCreateModalOpen(false)}
+            style={customStyles}
+            ariaHideApp={false}
+            shouldCloseOnOverlayClick={true}
+            contentLabel="Create school Modal"
+            className="absolute bg-white"
           >
-            <div className="flex flex-col items-center justify-center w-[350px] h-[250px] bg-white shadow-xl px-10 rounded-lg gap-5">
-              <div className="flex flex-col gap-1">
-                <label htmlFor="password" className="pl-1 flex flex-row gap-1">
-                  Password
-                  <span className={`text-[red]`}>*</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Password"
-                  name="password"
-                  id="password"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.password}
-                  className="px-5 py-1 outline-[purple] border-[grey] border-[0.5px] border-opacity-90"
-                />
-                {formik.touched.password && formik.errors.password && (
-                  <p className="text-sm text-[red]">{formik.errors.password}</p>
-                )}
+            <form className="delete-modal" onSubmit={finalForm.handleSubmit}>
+              <div className="self-center">
+                <p className="text-sm">Please enter Admin password.</p>
               </div>
-              <button
-                type="submit"
-                className="w-full bg-midPurple py-2 text-white rounded-[5px] text-sm font-bold"
-              >
-                Submit
-              </button>
-            </div>
-          </div>
+              <div className="w-full">
+                <InputText
+                  value={finalForm.values.password}
+                  setValue={finalForm.handleChange}
+                  id={"password"}
+                  name={"password"}
+                  label={"Enter password"}
+                  onChange={finalForm.handleChange}
+                  placeholder={"Password"}
+                  isInvalid={finalForm.errors.password}
+                  className={"w-full"}
+                  inputClassName={"w-full"}
+                  errorText={finalForm.errors?.password}
+                />
+                <button
+                  type="submit"
+                  className="standard-btn-1 w-full mt-5"
+                  disabled={isLoading}
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </ReactModal>
         </form>
       </div>
-      {/* { isLoading ? <Loader loadingText={"Creating school..."} /> : createSchForm} */}
     </div>
   );
 };

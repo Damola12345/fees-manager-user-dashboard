@@ -44,7 +44,7 @@ const ClassroomDetails = (props) => {
     { "Class Teacher": data.classTeacher },
     { "School Name": data.schoolName },
     { "No of Students": data.noOfStudents },
-    { "Class Fees": data.classFees },
+    { "Class Fees": `NGN ${money(data.classFees)}` },
     { "Total Fees paid": `NGN ${money(data.totalFees)}` },
     { "Total Fees expected": `NGN ${money(0)}` },
     { "Classroom ID": data._id },

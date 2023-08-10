@@ -1,21 +1,18 @@
-//import { faCircleXmark, faCaretDown } from '@fortawesome/free-solid-svg-icons';
-//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-//import SelectionDropdown from "../../components/SelectionDropdown/SelectionDropdown";
-import "./CreatePaymentPage.css";
-import { Loader } from "../../components/Loader/Loader";
-import { PaystackButton } from "react-paystack";
-import { useNavigate } from "react-router-dom";
-import BigBtn from "../../components/BigBtn/BigBtn";
-import { alertMessage } from "../../GlobalFunctions/GlobalFunctions";
-import PaneOption from "../../components/PaneOption/PaneOption";
-import PreviousIcon from "../../components/PreviousIcon/PreviousIcon";
-import React, { useState, useEffect } from "react";
-import * as Yup from "yup";
-import { useFormik } from "formik";
-import FileDB from "../../FileDB/methods/DBMethods";
 import { alertSuccess } from "../../utils/index.";
+import { money } from "../../GlobalFunctions/GlobalFunctions";
+import { PaystackButton } from "react-paystack";
+import { ReactComponent as DropDown } from "../../assets/svg/select-arrow.svg";
+import { useDashboard } from "../../contexts/DashboardContext";
+import { useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
+import * as Yup from "yup";
+import FileDB from "../../FileDB/methods/DBMethods";
+import InputText from "../../components/inputText/InputText";
+import PageHeader from "../../components/pageHeader/PageHeader";
+import React, { useState, useEffect } from "react";
+import ReactModal from "react-modal";
+import RowDisplay from "../../layouts/details/RowDisplay";
 
-const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
 const DATABASE = process.env.REACT_APP_DATABASE;
 const PAYSTACK_API_KEY = process.env.REACT_APP_PAYSTACK_API_KEY;
 
@@ -24,6 +21,33 @@ const CreatePaymentPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [students, setStudents] = useState("");
   const [studentList, setStudentList] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [stuDropdownOpen, setStuDropdownOpen] = useState(false);
+  const [btnFocus, setBtnFocus] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const { currentSchool } = useDashboard();
+
+  // Styles for modal
+  const customStyles = {
+    overlay: {
+      position: "fixed",
+      top: 0,
+      right: 0,
+      bottom: 0,
+      opacity: "1",
+      backgroundColor: "#00000087",
+      zIndex: 99999999999,
+    },
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      borderRadius: "8px",
+    },
+  };
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -47,15 +71,15 @@ const CreatePaymentPage = () => {
         .min(1000, "Minimum of 1000"),
       purpose: Yup.string()
         .required("Purpose is required")
-        .min(10, "Name must be at least 3 characters")
+        .min(10, "Name must be at least 10 characters")
         .max(100, "Name must not exceed 100 characters"),
-      studentName: Yup.string().required("Depositor name is required"),
+      studentName: Yup.string().required("Student name is required"),
       studentId: Yup.string().required(),
       studentClass: Yup.string().required("Classroom is required"),
     }),
     onSubmit: async (values) => {
-      console.log("submitted");
       setIsLoading(true);
+      setModalOpen(true);
       //formik.resetForm();
     },
   });
@@ -65,52 +89,23 @@ const CreatePaymentPage = () => {
       setIsLoading(true);
       const students = await FileDB.get("students", null, "browser");
       setStudents(students);
+      setStudentList(students);
       setIsLoading(false);
     }
   };
 
-  /* useEffect(() => {
-		fetch(`${BACKEND_HOST}/students?schoolName=${localStorage.currentSchool}`, {
-		  method: "GET",
-		  headers: {
-			'Content-Type': 'application/json',
-		  },
-		  credentials: "include",
-		})
-		.then((response) => {
-		  if (response.ok) {
-			  response.json().then((data) => {
-				setStudents(data.success);
-				setTimeout(() => {
-				  setIsLoading(false);
-				}, 1000);
-			  });
-		  } else if(response.status === 401) {
-			  navigate('/login');
-		  } else {
-			  response.json().then((message) => {
-				  setIsLoading(false);
-				  alertMessage(message.error, 'block', 'red');
-			  })
-		  }
-		})
-		.catch((err) => {
-		  setIsLoading(false);
-		  alertMessage('An error occured. Please retry', 'block', 'red');
-		  console.log(err.message)
-		});
-	  }, []); */
-
   const SearchStudent = (event) => {
-    //setSearchText(event.target.value);
+    setSearchText(event.target.value);
     if (event.target.value.length > 0) {
+      setStuDropdownOpen(true);
       const currentStudents = students.filter((stu) => {
         const name_id = stu.fullname + " - " + stu._id;
         return name_id.toLowerCase().includes(event.target.value);
       });
       setStudentList(currentStudents);
     } else {
-      setStudentList([]);
+      setStuDropdownOpen(false);
+      setStudentList(students);
     }
   };
 
@@ -131,6 +126,7 @@ const CreatePaymentPage = () => {
 
     if (DATABASE === "LOCAL_STORAGE") {
       setIsLoading(true);
+      setModalOpen(false);
       const response = await FileDB.post("payments", paymentObj);
       if (response === "ok") {
         ResetPayment();
@@ -141,67 +137,15 @@ const CreatePaymentPage = () => {
     }
   };
 
-  /* const savePayment = (details) => {
-    const payInfo = {
-      depositorName,
-      email,
-      studentName,
-      studentId,
-      studentClass,
-      amount: amount / 100,
-      purpose,
-      schoolName: localStorage.currentSchool,
-      refNo: details.reference,
-      status: details.status,
-      message: details.message,
-      transactionNo: details.transaction,
-    };
-    fetch(`${BACKEND_HOST}/save-payment`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(payInfo),
-    })
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((data) => {
-            setStudents(data.success);
-            setTimeout(() => {
-              setIsLoading(false);
-              navigate("/payments");
-            }, 1000);
-          });
-        } else if (response.status === 401) {
-          navigate("/login");
-        } else {
-          response.json().then((message) => {
-            setIsLoading(false);
-            alertMessage(message.error, "block", "red");
-          });
-        }
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        alertMessage("An error occured. Please retry", "block", "red");
-        console.log(err.message);
-      });
-  }; */
-
   const SelectStudent = (stu) => {
-    //alertMessage();
-    const selected_stu = document.getElementById("search-stu");
-    if (selected_stu)
-      selected_stu.value =
-        stu.fullname + " - " + "(" + stu.classroom + ") " + stu._id;
     formik.setFieldValue("studentName", stu.fullname);
     formik.setFieldValue("studentId", stu._id);
     formik.setFieldValue("studentClass", stu.classroom);
-    setStudentList([]);
   };
 
   const ResetPayment = () => {
+    setModalOpen(false);
+    setIsLoading(false);
     formik.resetForm();
   };
 
@@ -216,20 +160,16 @@ const CreatePaymentPage = () => {
     publicKey: PAYSTACK_API_KEY,
     text: "Pay Fees",
     onSuccess: (res) => {
-      //console.log(res)
       alert("Payment successful! Please check for email for a receipt");
       savePayment(res);
     },
     onClose: () => {
       setIsLoading(false);
+      setModalOpen(false);
       alert(
-        "Your paymebt will not be completed. Are you sure you want to exit?"
+        "Your payment will not be completed. Are you sure you want to exit?"
       );
     },
-  };
-
-  const completeForm = () => {
-    alertMessage("Please fill out form to proceed", "block", "red");
   };
 
   useEffect(() => {
@@ -237,215 +177,264 @@ const CreatePaymentPage = () => {
   }, []);
 
   return (
-    <div id="sch-reg-container">
-      <PreviousIcon path={-1} />
-      <h1 id="reg-school-title">Make Payment</h1>
-      {isLoading ? (
-        <Loader loadingText={"Loading..."} />
-      ) : (
-        <div id="school-reg-container">
-          {formik.values.amount &&
-          formik.values.depositorName &&
-          formik.values.email &&
-          formik.values.purpose &&
-          formik.values.studentClass &&
-          formik.values.studentId &&
-          formik.values.studentName ? (
-            <div></div>
-          ) : (
-            <form className="school-reg-form" onSubmit={formik.handleSubmit}>
-              {/* Depositor name input */}
-              <div className="flex flex-col gap-1">
-                <label
-                  htmlFor="depositorName"
-                  className="pl-1 flex flex-row gap-1"
+    <div className="pb-20">
+      <PageHeader previousPath={"/students"} />
+      <div className="register-student">
+        <h1 className="register-student__heading">Make Payment</h1>
+        <h2 className="register-classroom__subheading">
+          {currentSchool?.name}
+        </h2>
+        <form
+          className="register-classroom__form"
+          onSubmit={formik.handleSubmit}
+        >
+          {/* Depositor name input */}
+          <div className="w-full">
+            <InputText
+              value={formik.values.depositorName}
+              setValue={formik.handleChange}
+              id={"depositorName"}
+              name={"depositorName"}
+              label={"Depositor name"}
+              onChange={formik.handleChange}
+              placeholder={"Name"}
+              isInvalid={formik.errors.depositorName}
+              className={"w-full"}
+              inputClassName={"w-full"}
+              errorText={formik.errors?.depositorName}
+            />
+          </div>
+
+          {/* Depositor email input */}
+          <div className="w-full">
+            <InputText
+              value={formik.values.email}
+              setValue={formik.handleChange}
+              id={"email"}
+              name={"email"}
+              label={"Email"}
+              onChange={formik.handleChange}
+              placeholder={"Email"}
+              isInvalid={formik.errors.email}
+              className={"w-full"}
+              inputClassName={"w-full"}
+              errorText={formik.errors?.email}
+            />
+          </div>
+
+          {/* Amount input */}
+          <div className="w-full">
+            <InputText
+              value={formik.values.amount}
+              setValue={formik.handleChange}
+              id={"amount"}
+              name={"amount"}
+              label={"Amount"}
+              onChange={formik.handleChange}
+              placeholder={"Amount"}
+              isInvalid={formik.errors.amount}
+              className={"w-full"}
+              inputClassName={"w-full"}
+              errorText={formik.errors?.amount}
+              inputType={"number"}
+            />
+          </div>
+
+          {/* Purpose/Description input */}
+          <div className="w-full">
+            <InputText
+              value={formik.values.purpose}
+              setValue={formik.handleChange}
+              id={"purpose"}
+              name={"purpose"}
+              label={"Purpose / Description"}
+              onChange={formik.handleChange}
+              placeholder={"Purpose"}
+              isInvalid={formik.errors.purpose}
+              className={"w-full"}
+              inputClassName={"w-full"}
+              errorText={formik.errors?.purpose}
+            />
+          </div>
+
+          <div className="w-full flex flex-col items-start gap-2">
+            <div className={`w-full flex-grow`}>
+              <div className="standard-dropdown-1">
+                <p
+                  className={`label ${
+                    formik.errors.studentName ? "text-red" : "text-[#686A6D]"
+                  }`}
                 >
-                  Depositor name
-                  <span className={`text-[red]`}>*</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Depositor name"
-                  name="depositorName"
-                  id="depositorName"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  className="px-5 py-1 xl:w-[300px] outline-[purple] border-[grey] border-[0.5px] border-opacity-90"
-                />
-                {formik.touched.depositorName &&
-                  formik.errors.depositorName && (
-                    <p className="text-sm text-[red]">
-                      {formik.errors.depositorName}
-                    </p>
-                  )}
-              </div>
-
-              {/* Depositor email input */}
-              <div className="flex flex-col gap-1">
-                <label htmlFor="email" className="pl-1 flex flex-row gap-1">
-                  Depositor email
-                  <span className={`text-[red]`}>*</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Address"
-                  name="email"
-                  id="email"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.email}
-                  className="px-5 py-1 xl:w-[300px] outline-[purple] border-[grey] border-[0.5px] border-opacity-90"
-                />
-                {formik.touched.email && formik.errors.email && (
-                  <p className="text-sm text-[red]">{formik.errors.email}</p>
-                )}
-              </div>
-
-              {/* Amount input */}
-              <div className="flex flex-col gap-1">
-                <label htmlFor="amount" className="pl-1 flex flex-row gap-1">
-                  Amount
-                  <span className={`text-[red]`}>*</span>
-                </label>
-                <input
-                  type="number"
-                  placeholder="Amount"
-                  name="amount"
-                  id="amount"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.amount}
-                  className="px-5 py-1 xl:w-[300px] outline-[purple] border-[grey] border-[0.5px] border-opacity-90"
-                />
-                {formik.touched.amount && formik.errors.amount && (
-                  <p className="text-sm text-[red]">{formik.errors.amount}</p>
-                )}
-              </div>
-
-              {/* Purpose/Description input */}
-              <div className="flex flex-col gap-1">
-                <label htmlFor="purpose" className="pl-1 flex flex-row gap-1">
-                  Purpose/Description
-                  <span className={`text-[red]`}>*</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Purpose"
-                  name="purpose"
-                  id="purpose"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.purpose}
-                  className="px-5 py-1 xl:w-[300px] outline-[purple] border-[grey] border-[0.5px] border-opacity-90"
-                />
-                {formik.touched.purpose && formik.errors.purpose && (
-                  <p className="text-sm text-[red]">{formik.errors.purpose}</p>
-                )}
-              </div>
-
-              <p className="form-text">Select student</p>
-              <input
-                id="search-stu"
-                className="input-field"
-                type="text"
-                placeholder="Search student name and select"
-                name="school-name"
-                required
-                onChange={SearchStudent}
-              ></input>
-              <div id="students-dropdown">
-                {studentList.map((stu) => {
-                  return (
-                    <div
-                      onClick={() => SelectStudent(stu)}
-                      key={stu._id + stu.fullname}
-                    >
-                      <PaneOption
-                        name={stu.fullname + " - " + "(" + stu.classroom + ")"}
-                        bcolor="whitesmoke"
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            </form>
-          )}
-          {formik.values.amount &&
-            formik.values.depositorName &&
-            formik.values.email &&
-            formik.values.purpose &&
-            formik.values.studentClass &&
-            formik.values.studentId &&
-            formik.values.studentName && (
-              <div id="student-dets">
-                <p>
-                  You are about to make a payment for the student with the
-                  following details...
+                  Select student
                 </p>
-                <p className="det" id="det-name">
-                  Studen name: {formik.values.studentName}
-                </p>
-                <p className="det" id="det-id">
-                  Student Id: {formik.values.studentId}
-                </p>
-                <p className="det" id="det-class">
-                  Student class: {formik.values.studentClass}
-                </p>
-                <p className="det" id="det-amount">
-                  Amount: {formik.values.amount}
-                </p>
-                <h4 style={{ color: "orange" }}>
-                  Please confirm the details before proceeding
-                </h4>
-                <div
-                  id="cancel-student"
+                <button
+                  type="button"
+                  className={`button ${
+                    !formik.errors.studentName &&
+                    (btnFocus
+                      ? "border-[2px] border-midPurple"
+                      : "border-[1px] border-[#8B8D90]")
+                  } ${formik.errors.studentName && "border-[2px] border-red"}
+                  ${!formik.errors.studentName && "hover:border-midPurple"}`}
                   onClick={() => {
-                    ResetPayment();
+                    setStuDropdownOpen(!stuDropdownOpen);
+                  }}
+                  onFocus={() => {
+                    setBtnFocus(true);
+                  }}
+                  onBlur={() => {
+                    setBtnFocus(false);
                   }}
                 >
-                  Cancel
-                </div>
-              </div>
-            )}
+                  <div className="display-text">
+                    <p className="cut-text">
+                      {formik.values.studentName
+                        ? `${formik.values.studentName} - (${formik.values.studentClass})`
+                        : "Select student"}
+                    </p>
+                  </div>
+                  <DropDown />
 
-          {formik.values.amount &&
-          formik.values.depositorName &&
-          formik.values.email &&
-          formik.values.purpose &&
-          formik.values.studentClass &&
-          formik.values.studentId &&
-          formik.values.studentName ? (
-            <div
-              id="submit-pay"
-              type="submit"
-              onClick={(e) => {
-                e.preventDefault();
-                setIsLoading(true);
-              }}
-            >
-              <PaystackButton {...componentProps} />
+                  {stuDropdownOpen && (
+                    <ul
+                      className="w-full absolute left-0 bottom-[70px] bg-white py-5 px-4 text-16 text-black font-extrabold
+                    flex flex-col justify-center overflow-scroll shadow-md max-h-[300px] border
+                    border-grey border-opacity-40 rounded-md"
+                    >
+                      {studentList?.map((stu, index) => {
+                        return (
+                          <li
+                            key={index}
+                            type="button"
+                            onClick={() => {
+                              SelectStudent(stu);
+                            }}
+                            className={`button__options-item ${
+                              index === 0 && "mt-5"
+                            } hover:bg-[whitesmoke] px-4`}
+                          >
+                            {`${stu.fullname} - (${stu.classroom})`}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                </button>
+
+                {formik.errors.studentName && (
+                  <div className="error">
+                    <div className="err-icon">!</div>
+                    <p>{formik.errors.studentName}</p>
+                  </div>
+                )}
+              </div>
             </div>
-          ) : (
-            <button
-              onClick={() => console.log(formik.errors)}
-              type="submit"
-              className={`
+            <div className={`${formik.errors.studentName && "mb-0"}`}>
+              <InputText
+                value={searchText}
+                setValue={setSearchText}
+                id={"search"}
+                name={"search"}
+                label={""}
+                onChange={SearchStudent}
+                onBlur={() => setSearchText("")}
+                placeholder={"Search"}
+                isInvalid={false}
+                className={"w-full"}
+                inputClassName={"w-full"}
+                errorText={""}
+                type="search"
+              />
+            </div>
+          </div>
+
+          <button
+            onClick={() => console.log(formik.errors)}
+            type="submit"
+            className={`
               ${isLoading ? "cursor-wait opacity-70" : "cursor-pointer"}
               w-full bg-midPurple text-white py-3 rounded-lg mt-10
               `}
-            >
-              {isLoading ? "..." : "Make payment"}
-            </button>
-          )}
-          <h5 id="pay-message">
+          >
+            {isLoading ? "..." : "Make payment"}
+          </button>
+
+          <p className="text-sm text-grey mt-6 max-w-[400px] text-center">
             All payments are processed using{" "}
             <a href="https://paystack.com/" target={"blank"}>
               Paystack
             </a>{" "}
             click "Pay Fees" to continue.
-          </h5>
-        </div>
-      )}
+          </p>
+        </form>
+
+        <ReactModal
+          isOpen={modalOpen}
+          onRequestClose={() => setModalOpen(false)}
+          style={customStyles}
+          ariaHideApp={false}
+          shouldCloseOnOverlayClick={true}
+          contentLabel="Create classroom Modal"
+          className="w-[90%] md:w-[60%] xl:w-[50%] h-[60vh] max-h-[500px] absolute bg-white"
+        >
+          <form className="bg-white flex flex-col items-center rounded-lg px-5 md:px-8 py-10">
+            <div className="self-center">
+              <p className="text-16 font-extrabold uppercase">
+                Please confirm student information before proceeding.
+              </p>
+            </div>
+            <div className="w-full max-h-[300px] overflow-scroll mt-5 border border-grey border-opacity-50 rounded-md">
+              <RowDisplay
+                title={"Student name"}
+                description={formik.values.studentName}
+              />
+              <RowDisplay
+                title={"Student Class"}
+                description={formik.values.studentClass}
+              />
+              <RowDisplay
+                title={"Student Id"}
+                description={formik.values.studentId}
+              />
+              <RowDisplay
+                title={"Amount"}
+                description={`NGN ${money(formik.values.amount)}`}
+              />
+              <RowDisplay
+                title={"Depositor name"}
+                description={formik.values.depositorName}
+              />
+              <RowDisplay
+                title={"Depositor email"}
+                description={formik.values.email}
+              />
+              <RowDisplay
+                title={"Purpose"}
+                description={formik.values.purpose}
+              />
+            </div>
+
+            <div className="w-full flex items-center justify-between mt-8">
+              <button
+                onClick={ResetPayment}
+                type="button"
+                className="standard-btn-1 white w-[48%]"
+              >
+                Cancel
+              </button>
+              <div
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsLoading(true);
+                }}
+                className="standard-btn-1 w-[48%]"
+              >
+                <PaystackButton className="w-full h-full" {...componentProps} />
+              </div>
+            </div>
+          </form>
+        </ReactModal>
+      </div>
     </div>
   );
 };
