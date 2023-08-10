@@ -33,7 +33,6 @@ class StudentMethods {
     const allStudents = await getLocalStorageItem("students");
     const newStu = {
       _id: uuid(),
-      schoolId: localStorage.getItem("currentSchool"),
       ...data,
       noOfStudents: 0,
       totalFeesExpected: 0,

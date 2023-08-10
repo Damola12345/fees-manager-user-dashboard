@@ -20,7 +20,7 @@ const RegisterStudentPage = () => {
   const [sexDropdownOpen, setSexDropdownOpen] = useState(false);
   const [clsDropdownOpen, setClsDropdownOpen] = useState(false);
   const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [classrooms, setClassrooms] = useState([]);
+  const [classrooms, setClassrooms] = useState(null);
 
   // Styles for modal
   const customStyles = {
@@ -52,7 +52,15 @@ const RegisterStudentPage = () => {
     const phoneNo = values.phoneNo;
     const discount = values.discount;
     const classroom = values.classroom;
-    const stuInfo = { fullname, age, sex, phoneNo, discount, classroom };
+    const stuInfo = {
+      fullname,
+      age,
+      sex,
+      phoneNo,
+      discount,
+      classroom,
+      schoolId: currentSchool?._id,
+    };
 
     if (DATABASE === "LOCAL_STORAGE") {
       const response = await FileDB.post("students", stuInfo);
@@ -241,6 +249,19 @@ const RegisterStudentPage = () => {
               isInvalid={formik.errors.classroom}
               errorText={formik.errors?.classroom}
             />
+            {classrooms && classrooms.length === 0 && (
+              <p className="text-sm mt-3">
+                There is no classroom registered under {currentSchool?.name}.
+                Please{" "}
+                <span
+                  className="bg-midPurple text-sm rounded-md px-2 py-1 text-white cursor-pointer"
+                  onClick={() => navigate("/classrooms/register")}
+                >
+                  Create
+                </span>{" "}
+                one first before proceeding.
+              </p>
+            )}
           </div>
 
           {/* Phone Number input */}

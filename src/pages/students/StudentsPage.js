@@ -8,6 +8,7 @@ import PageHeader from "../../components/pageHeader/PageHeader";
 import { ReactComponent as PlusIcon } from "../../assets/svg/plus.svg";
 import { ReactComponent as FilterIcon } from "../../assets/svg/filter.svg";
 import { ReactComponent as CaretDown } from "../../assets/svg/caret-down.svg";
+import { useDashboard } from "../../contexts/DashboardContext";
 
 const DATABASE = process.env.REACT_APP_DATABASE;
 
@@ -25,6 +26,7 @@ const StudentsPage = () => {
   const [checkedClassrooms, setCheckedClassrooms] = useState([]);
   const [checkedDiscount, setCheckedDiscount] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const { currentSchool } = useDashboard();
   const [allFilters, setAllFilters] = useState({
     classrooms: [],
     sex: [],
@@ -34,8 +36,16 @@ const StudentsPage = () => {
   const getStudents = async () => {
     if (DATABASE === "LOCAL_STORAGE") {
       setIsLoading(true);
-      const students = await FileDB.get("students", null, "browser");
-      const classrooms = await FileDB.get("classrooms", null, "browser");
+      const students = await FileDB.get(
+        "students",
+        { schoolId: currentSchool?._id },
+        "browser"
+      );
+      const classrooms = await FileDB.get(
+        "classrooms",
+        { schoolId: currentSchool?._id },
+        "browser"
+      );
       const classList = classrooms.sort().map((cls) => {
         return cls.name;
       });
@@ -159,7 +169,7 @@ const StudentsPage = () => {
 
   useEffect(() => {
     getStudents();
-  }, []);
+  }, [currentSchool]);
 
   useEffect(() => {
     !searchText && SearchStudent({ target: { value: "" } });
@@ -179,7 +189,7 @@ const StudentsPage = () => {
           </button>
         }
       />
-      {!isLoading && (
+      {!isLoading && students.length > 0 && (
         <div className="students__header">
           <div className="students__header-filters">
             <InputText
@@ -287,34 +297,49 @@ const StudentsPage = () => {
           />
         </div>
       )}
-      <div className="students__list">
-        {isLoading ? (
-          <Loader loadingText={"Loading..."} />
-        ) : studentList ? (
-          studentList.map((stu) => {
-            return (
-              <div
-                key={stu._id}
-                onClick={() => {
-                  navigate(`/students/${String(stu._id)}`);
-                }}
-              >
-                <ScrollOption
+      {!isLoading && students.length === 0 ? (
+        <div className="empty-state">
+          <h1 className="heading">
+            There are no students registered under {currentSchool?.name}.
+          </h1>
+          <button
+            className="standard-btn-1 w-full max-w-[350px]"
+            onClick={() => navigate("/students/register")}
+          >
+            <PlusIcon />
+            Add student
+          </button>
+        </div>
+      ) : (
+        <div className="students__list">
+          {isLoading ? (
+            <Loader loadingText={"Loading..."} />
+          ) : studentList ? (
+            studentList.map((stu) => {
+              return (
+                <div
                   key={stu._id}
-                  one={stu.fullname}
-                  two={stu.classroom}
-                  three={stu.totalPaidFees}
-                  four={stu.discount}
-                  five={stu.sex}
-                  header={false}
-                />
-              </div>
-            );
-          })
-        ) : (
-          <div></div>
-        )}
-      </div>
+                  onClick={() => {
+                    navigate(`/students/${String(stu._id)}`);
+                  }}
+                >
+                  <ScrollOption
+                    key={stu._id}
+                    one={stu.fullname}
+                    two={stu.classroom}
+                    three={stu.totalPaidFees}
+                    four={stu.discount}
+                    five={stu.sex}
+                    header={false}
+                  />
+                </div>
+              );
+            })
+          ) : (
+            <div></div>
+          )}
+        </div>
+      )}
       {studentList?.length > 0 && <div className="students__pagination"></div>}
     </section>
   );
