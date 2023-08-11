@@ -15,7 +15,7 @@ const DATABASE = process.env.REACT_APP_DATABASE;
 
 const EditSchool = () => {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [levelDropdownOpen, setLevelDropdownOpen] = useState(false);
   const { currentSchool, setCurrentSchool, setReload } = useDashboard();
