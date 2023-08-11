@@ -30,8 +30,8 @@ import { DashboardProvider } from "./contexts/DashboardContext";
 
 function App() {
   return (
-    <AuthProvider>
-      <DashboardProvider>
+    <DashboardProvider>
+      <AuthProvider>
         <Router>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -43,9 +43,9 @@ function App() {
 
             <Route path="/schools" element={<Schools />} />
             <Route path="/schools/register" element={<RegisterSchool />} />
-            <Route path="/schools/:schoolName" element={<ViewSchool />} />
+            <Route path="/schools/:schoolId" element={<ViewSchool />} />
             <Route
-              path="/schools/:schoolName/edit"
+              path="/schools/:schoolId/edit"
               element={<EditSchoolData />}
             />
 
@@ -54,9 +54,9 @@ function App() {
               element={<RegisterClassroom />}
             />
             <Route path="/classrooms" element={<Classrooms />} />
-            <Route path="/classrooms/:className" element={<ViewClassroom />} />
+            <Route path="/classrooms/:classId" element={<ViewClassroom />} />
             <Route
-              path="/classrooms/:className/edit"
+              path="/classrooms/:classId/edit"
               element={<EditClassroomData />}
             />
 
@@ -81,8 +81,8 @@ function App() {
             />
           </Routes>
         </Router>
-      </DashboardProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </DashboardProvider>
   );
 }
 

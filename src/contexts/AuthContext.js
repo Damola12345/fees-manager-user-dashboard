@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { createContext, useContext, useEffect, useState } from "react";
+import { useDashboard } from "./DashboardContext";
 
 const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
 const DATABASE = process.env.REACT_APP_DATABASE;
@@ -8,6 +9,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const { setCurrentSchool } = useDashboard();
 
   const getCurrentUser = useMemo(async () => {
     if (DATABASE === "LOCAL_STORAGE") {
@@ -32,6 +34,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
+    setCurrentSchool(null);
     localStorage.clear();
   };
 

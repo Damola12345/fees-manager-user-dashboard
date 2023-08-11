@@ -18,21 +18,21 @@ const ClassroomDetails = (props) => {
     <StickyHeader>
       <div
         onClick={() => {
-          navigate(`/students?classroom=${data.name}`);
+          navigate(`/students?classroom=${data._id}`);
         }}
       >
         <BigBtn text="View Students" bcolor="#680E4B" grid color="white" />
       </div>
       <div
         onClick={() => {
-          navigate(`/payments?classroom=${data.name}`);
+          navigate(`/payments?classroom=${data._id}`);
         }}
       >
         <BigBtn text="View Payments" bcolor="#680E4B" grid color="white" />
       </div>
       <div
         onClick={() => {
-          navigate(`/classrooms/${data.name}/edit`);
+          navigate(`/classrooms/${data._id}/edit`);
         }}
       >
         <BigBtn text="Edit Classroom" bcolor="#680E4B" grid color="white" />

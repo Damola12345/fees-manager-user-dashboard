@@ -62,9 +62,12 @@ class SchoolMethods {
     }
   }
 
-  async Edit(filter, data) {
+  async edit(filter, data) {
     // Function to edit School
-    return editLocalStorageItem(filter, { ...data, updatedAt: new Date() });
+    return editLocalStorageItem("schools", filter, {
+      ...data,
+      updatedAt: new Date(),
+    });
   }
 
   async delete(filter) {

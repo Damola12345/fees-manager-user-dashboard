@@ -46,43 +46,55 @@ const Header = () => {
     <div className="app-header">
       <div className="header-con">
         <div className="header-con__left">
-          <div className="dropdown-con">
-            <button
-              className="button"
-              onClick={() => setSchoolDropdown(!schoolDropdown)}
-              onBlur={() => setSchoolDropdown(false)}
-            >
-              <h2>{currentSchool ? currentSchool.name : "Select School"}</h2>
-              <ArrowDown className={`${schoolDropdown && "-rotate-[90deg]"}`} />
-              {schoolDropdown && (
-                <ul className="dropdown-list">
-                  {schools?.map((sch, index) => {
-                    if (!currentSchool) {
-                      return (
-                        <li
-                          className="dropdown-list__item"
-                          key={index}
-                          onClick={(e) => selectSchool(e, sch)}
-                        >
-                          <p className="truncate">{sch.name}</p>
-                        </li>
-                      );
-                    } else if (sch?._id !== currentSchool?._id) {
-                      return (
-                        <li
-                          className="dropdown-list__item"
-                          key={index}
-                          onClick={(e) => selectSchool(e, sch)}
-                        >
-                          <p className="truncate">{sch.name}</p>
-                        </li>
-                      );
-                    }
-                  })}
-                </ul>
-              )}
-            </button>
-          </div>
+          {window.location.pathname === "/schools" ||
+          window.location.pathname === "/classrooms" ||
+          window.location.pathname === "/students" ||
+          window.location.pathname === "/payments" ||
+          window.location.pathname === "/" ? (
+            <div className="dropdown-con">
+              <button
+                className="button"
+                onClick={() => setSchoolDropdown(!schoolDropdown)}
+                onBlur={() => setSchoolDropdown(false)}
+              >
+                <h2>{currentSchool ? currentSchool.name : "Select School"}</h2>
+                <ArrowDown
+                  className={`${schoolDropdown && "-rotate-[90deg]"}`}
+                />
+                {schoolDropdown && (
+                  <ul className="dropdown-list">
+                    {schools?.map((sch, index) => {
+                      if (!currentSchool) {
+                        return (
+                          <li
+                            className="dropdown-list__item"
+                            key={index}
+                            onClick={(e) => selectSchool(e, sch)}
+                          >
+                            <p className="truncate">{sch.name}</p>
+                          </li>
+                        );
+                      } else if (sch?._id !== currentSchool?._id) {
+                        return (
+                          <li
+                            className="dropdown-list__item"
+                            key={index}
+                            onClick={(e) => selectSchool(e, sch)}
+                          >
+                            <p className="truncate">{sch.name}</p>
+                          </li>
+                        );
+                      }
+                    })}
+                  </ul>
+                )}
+              </button>
+            </div>
+          ) : (
+            <h2 className="text-xl font-extrabold truncate text-midPurple">
+              {currentSchool ? currentSchool.name : "Select School"}
+            </h2>
+          )}
         </div>
         <div className="header-con__right">
           <div className="relative">

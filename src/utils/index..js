@@ -70,7 +70,6 @@ export const editLocalStorageItem = async (itemName, filter, newData) => {
   const itemsPromise = new Promise((resolve, reject) => {
     setTimeout(() => {
       const allItems = JSON.parse(localStorage.getItem(itemName));
-
       if (filter) {
         const filterKeys = Object.keys(filter);
         let contains = true;
