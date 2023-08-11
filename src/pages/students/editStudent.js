@@ -92,7 +92,7 @@ const EditStudent = () => {
       password: "",
     },
     validationSchema: Yup.object({
-      password: Yup.string().required("Password is required."),
+      password: Yup.string().required("Password is required"),
     }),
     onSubmit: async () => {
       setEditModalOpen(false);
