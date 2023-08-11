@@ -49,7 +49,7 @@ const SchoolsPage = () => {
       <div className="w-full flex items-center justify-center">
         {isLoading ? (
           <Loader loadingText={"Loading..."} />
-        ) : (
+        ) : schools.length > 0 ? (
           <div className="school-page__con">
             <h2 className="heading">Select school to manage</h2>
             <div className="school-list">
@@ -73,6 +73,17 @@ const SchoolsPage = () => {
                 );
               })}
             </div>
+          </div>
+        ) : (
+          <div className="empty-state">
+            <h1 className="heading">Please create a school to get started.</h1>
+            <button
+              className="standard-btn-1 w-full max-w-[350px]"
+              onClick={() => navigate("/schools/register")}
+            >
+              <PlusIcon />
+              Register school
+            </button>
           </div>
         )}
       </div>

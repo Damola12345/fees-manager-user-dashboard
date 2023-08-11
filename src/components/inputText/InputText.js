@@ -56,7 +56,7 @@ const InputText = ({
           }}
           readOnly={readOnly}
         />
-        {value.length > 0 && type === "search" && (
+        {value?.length > 0 && type === "search" && (
           <button
             onClick={() => {
               setValue("");

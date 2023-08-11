@@ -1,420 +1,357 @@
-import "./editView.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
+import { alertSuccess } from "../../utils/index.";
+import { ReactComponent as RefreshIcon } from "../../assets/svg/refresh.svg";
+import { useDashboard } from "../../contexts/DashboardContext";
+import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
-import BigBtn from "../../components/BigBtn/BigBtn";
-import { useState, useEffect } from "react";
-import { Loader } from "../../components/Loader/Loader";
+import { useEffect, useState } from "react";
+import * as Yup from "yup";
+import Dropdown from "../../components/dropdown/Dropdown";
+import FileDB from "../../FileDB/methods/DBMethods";
+import InputText from "../../components/inputText/InputText";
+import PageHeader from "../../components/pageHeader/PageHeader";
+import ReactModal from "react-modal";
 
-const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
+const DATABASE = process.env.REACT_APP_DATABASE;
 
-const EditStudent = (props) => {
+const EditStudent = () => {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [clsDropdownOpen, setClsDropdownOpen] = useState(false);
+  const [sexDropdownOpen, setSexDropdownOpen] = useState(false);
   const [classrooms, setClassrooms] = useState([]);
-  const [student, setStudent] = useState({
-    fullname: "",
-    age: "",
-    sex: "",
-    discount: "",
-    classroom: "",
-    phoneNo: "",
-    _id: "",
-  });
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [age, setAge] = useState("");
-  const [sex, setSex] = useState("");
-  const [phone, setPhone] = useState("");
-  const [classroom, setClassroom] = useState("");
-  const [discount, setDiscount] = useState("");
-  const [save, setSave] = useState(false);
-  const [info, setInfo] = useState({});
-  const user = localStorage.user;
-  let editForm;
+  const [student, setStudent] = useState({});
+  const { currentSchool, setCurrentSchool, setReload } = useDashboard();
 
-  const alertMessage = (message = "", display = "none", color = "none") => {
-    const msg = document.getElementById("err-msg");
-    msg.innerHTML = message;
-    msg.style.display = display;
-    msg.style.color = color;
+  // Styles for modal
+  const customStyles = {
+    overlay: {
+      position: "fixed",
+      top: 0,
+      right: 0,
+      bottom: 0,
+      opacity: "1",
+      backgroundColor: "#00000087",
+      zIndex: 99999999999,
+    },
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      borderRadius: "8px",
+    },
   };
 
-  useEffect(() => {
-    fetch(
-      `${BACKEND_HOST}/classrooms?schoolName=${localStorage.currentSchool}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    )
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((data) => {
-            setTimeout(() => {
-              const classList = data.success.sort().map((cls) => {
-                return cls.name;
-              });
-              classList.sort();
-              setClassrooms(classList);
-              setIsLoading(false);
-            }, 1000);
-          });
-        } else if (response.status === 401) {
-          navigate("/login");
-        } else {
-          response.json().then((message) => {
-            setIsLoading(false);
-            //alertMessage(message.error, 'block', 'red');
-          });
+  const formik = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      firstName: student?.fullname?.split(" ")[0],
+      lastName: student?.fullname?.split(" ")[1],
+      age: student?.age,
+      sex: student?.sex,
+      phoneNo: student?.phoneNo,
+      discount: student?.discount,
+      classroom: student?.classroom,
+    },
+    validationSchema: Yup.object({
+      firstName: Yup.string()
+        .required("Fistname is required")
+        .min(5, "Name must be at least 3 characters")
+        .max(100, "Name must not exceed 100 characters"),
+      lastName: Yup.string()
+        .required("Lastname is required")
+        .min(5, "Name must be at least 3 characters")
+        .max(100, "Name must not exceed 100 characters"),
+      age: Yup.number().required("Age is required").min(1, "Minimum of 1"),
+      sex: Yup.string().required("Sex is required"),
+      phoneNo: Yup.string()
+        .required("Phone number is required")
+        .min(11, "Phone number must be 11 characters"),
+      discount: Yup.number(),
+      classroom: Yup.string()
+        .required("Classroom is required")
+        .min(3, "Classroom must be at least 3 characters"),
+    }),
+    onSubmit: async (values) => {
+      let changed = false;
+      Object.keys(values).map((key) => {
+        if (values[key] !== formik.initialValues[key]) {
+          changed = true;
         }
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        //alertMessage('An error occured. Please retry', 'block', 'red');
-        console.log(err.message);
       });
+      changed && setEditModalOpen(true);
+    },
+  });
 
-    fetch(
-      `${BACKEND_HOST}/students/${props.id}?schoolName=${localStorage.currentSchool}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    )
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((obj) => {
-            setTimeout(() => {
-              setStudent(obj.success);
-              setFirstname(obj.success.fullname.split(" ")[1]);
-              setLastname(obj.success.fullname.split(" ")[0]);
-              setSex(obj.success.sex);
-              setPhone(obj.success.phoneNo);
-              setClassroom(obj.success.classroom);
-              setAge(obj.success.age);
-              setDiscount(obj.success.discount);
-            }, 1000);
-          });
-        } else if (response.status === 401) {
-          navigate("/login");
-        } else {
-          response.json().then((message) => {
-            setTimeout(() => {
-              setIsLoading(false);
-              //alertMessage(message.error, 'block', 'red');
-            }, 3000);
-          });
+  const finalForm = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      password: "",
+    },
+    validationSchema: Yup.object({
+      password: Yup.string().required("Password is required."),
+    }),
+    onSubmit: async () => {
+      setEditModalOpen(false);
+      editStudent();
+    },
+  });
+
+  const editStudent = async () => {
+    if (DATABASE === "LOCAL_STORAGE") {
+      setIsLoading(true);
+      const response = await FileDB.put(
+        "students",
+        { _id: student?._id },
+        {
+          fullname: `${formik.values.firstName} ${formik.values.lastName}`,
+          classroom: formik.values.classroom,
+          age: formik.values.age,
+          sex: formik.values.sex,
+          discount: formik.values.discount,
+          phoneNo: formik.values.phoneNo,
         }
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        //alertMessage('An error occured. Please retry', 'block', 'red');
-        console.log(err.message);
-      });
-  }, []);
-
-  const saveEdit = () => {
-    if (
-      student.fullname.split(" ")[1] !== firstname ||
-      student.fullname.split(" ")[0] !== lastname
-    )
-      info.fullname = `${lastname} ${firstname}`;
-    if (student.age !== age) info.age = age;
-    if (student.sex !== sex) info.sex = sex;
-    if (student.classroom !== classroom) info.classroom = classroom;
-    if (student.phoneNo !== phone) info.phone = phone;
-    if (student.discount !== discount) info.discount = discount;
-
-    if (Object.keys(info).length > 0) {
-      setSave(true);
-    } else {
-      alertMessage("No changes made. Student is up to date!", "block", "green");
+      );
+      setIsLoading(false);
+      alertSuccess("Student updated successfully!");
+      navigate(window.location.pathname?.split("/edit")[0]);
     }
   };
 
-  const editStudent = () => {
-    setIsLoading(true);
-    fetch(
-      `${BACKEND_HOST}/students/${props.id}/edit?schoolName=${localStorage.currentSchool}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(info),
-      }
-    )
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((data) => {
-            setTimeout(() => {
-              setStudent(data.success);
-              setIsLoading(false);
-              navigate(`/students/${props.id}`);
-            }, 1000);
-          });
-        } else if (response.status === 401) {
-          navigate("/login");
-        } else {
-          response.json().then((message) => {
-            setIsLoading(false);
-            setSave(false);
-            cancelSave();
-            alertMessage(message.error, "block", "red");
-          });
-        }
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        setSave(false);
-        cancelSave();
-        alertMessage("An error occured. Please retry", "block", "red");
-        console.log(err.message);
+  const getStudent = async () => {
+    if (DATABASE === "LOCAL_STORAGE") {
+      setIsLoading(true);
+      const filter = { _id: window.location.pathname.split("/")[2] };
+      const stuArray = await FileDB.get("students", filter, "browser");
+      setStudent(stuArray[0]);
+      setIsLoading(false);
+    }
+  };
+
+  const getClassrooms = async () => {
+    if (DATABASE === "LOCAL_STORAGE") {
+      setIsLoading(true);
+      const filter = { schoolId: currentSchool?._id };
+      const allClassrooms = await FileDB.get("classrooms", filter, "browser");
+      const clsNames = allClassrooms.map((cls) => {
+        return cls?.name;
       });
+      setClassrooms(clsNames);
+      setIsLoading(false);
+    }
   };
 
-  const cancelSave = () => {
-    setSave(false);
-    alertMessage();
-    setInfo({});
-    setFirstname(student.fullname.split(" ")[1]);
-    setLastname(student.fullname.split(" ")[0]);
-    setSex(student.sex);
-    setPhone(student.phoneNo);
-    setClassroom(student.classroom);
-    setAge(student.age);
-    setDiscount(student.discount);
-  };
-
-  editForm = (
-    <div>
-      <div id="input-pair">
-        <h4 className="input-txt">Fullname:</h4>
-        <div className="edit-input">
-          <input
-            type={"text"}
-            defaultValue={student.fullname?.split(" ")[1]}
-            name="Firstname"
-            onChange={(event) => {
-              setFirstname(event.target.value);
-              alertMessage();
-            }}
-          ></input>
-        </div>
-        <div className="edit-input">
-          <input
-            type="text"
-            defaultValue={student.fullname?.split(" ")[0]}
-            name="Lastname"
-            onChange={(event) => {
-              setLastname(event.target.value);
-              alertMessage();
-            }}
-          ></input>
-        </div>
-      </div>
-      <div id="input-single">
-        <h4 className="input-txt">Class:</h4>
-        <select
-          className="sex-dropdown"
-          required
-          name="classrooms"
-          defaultValue={student.classroom}
-          onChange={(event) => {
-            setClassroom(event.target.value);
-            alertMessage();
-          }}
-        >
-          <option value={""}>{"Select Class"}</option>
-          {classrooms.map((cls) => {
-            return (
-              <option key={cls} value={cls}>
-                {cls}
-              </option>
-            );
-          })}
-        </select>
-      </div>
-      <div id="input-single">
-        <h4 className="input-txt">Sex:</h4>
-        <select
-          className="sex-dropdown"
-          required
-          name="sex"
-          onChange={(event) => {
-            setSex(event.target.value);
-            alertMessage();
-          }}
-        >
-          {student.sex === "Male" ? (
-            <option value="Male">Male</option>
-          ) : (
-            <option value="Female">Female</option>
-          )}
-
-          {student.sex === "Female" ? (
-            <option value="Male">Male</option>
-          ) : (
-            <option value="Female">Female</option>
-          )}
-        </select>
-      </div>
-      <div id="input-single">
-        <h4 className="input-txt">Phone:</h4>
-        <div className="edit-input">
-          <input
-            id="input-phone"
-            type="text"
-            defaultValue={student.phoneNo}
-            name="phone"
-            onChange={(event) => {
-              setPhone(event.target.value);
-              alertMessage();
-            }}
-          ></input>
-        </div>
-      </div>
-      <div id="input-single">
-        <h4 className="input-txt">Age:</h4>
-        <div className="edit-input">
-          <input
-            id="input-age"
-            type="number"
-            defaultValue={student.age}
-            name="age"
-            onChange={(event) => {
-              setAge(event.target.value);
-              alertMessage();
-            }}
-          ></input>
-        </div>
-      </div>
-      <div id="input-single">
-        <h4 className="input-txt">discount:</h4>
-        <div className="edit-input">
-          <input
-            id="input-age"
-            type="number"
-            defaultValue={student.discount}
-            name="discount"
-            onChange={(event) => {
-              setDiscount(event.target.value);
-              alertMessage();
-            }}
-          ></input>
-        </div>
-      </div>
-      <div id="input-single">
-        <h4 className="input-txt">Student ID:</h4>
-        <div className="edit-input">
-          <input
-            id="input-id"
-            className="immutable"
-            type="text"
-            value={student._id}
-            name="id"
-            readOnly
-          ></input>
-        </div>
-      </div>
-    </div>
-  );
-
-  const saveForm = (
-    <form id="save-form">
-      <div id="input-single">
-        <input
-          className="immutable"
-          value={`${lastname} ${firstname}`}
-          readOnly
-        ></input>
-      </div>
-      <div id="input-single">
-        <input className="immutable" value={`${classroom}`} readOnly></input>
-      </div>
-      <div id="input-single">
-        <input className="immutable" value={`${sex}`} readOnly></input>
-      </div>
-      <div id="input-single">
-        <input className="immutable" value={`${phone}`} readOnly></input>
-      </div>
-      <div id="input-single">
-        <input
-          className="immutable"
-          value={`${age} years old`}
-          readOnly
-        ></input>
-      </div>
-      <div id="input-single">
-        <input className="immutable" value={`${discount}%`} readOnly></input>
-      </div>
-      <div id="final-buttons">
-        <button className="checkout-btns" onClick={() => cancelSave()}>
-          Cancel
-        </button>
-        <button
-          className="checkout-btns"
-          id="confirm-btn"
-          onClick={() => editStudent()}
-        >
-          Confirm
-        </button>
-      </div>
-    </form>
-  );
+  useEffect(() => {
+    getStudent();
+    getClassrooms();
+  }, []);
 
   return (
-    <div id="edit-con">
-      <div id="nav-btns">
-        <div
-          id="return"
-          onClick={() => {
-            navigate(`/students/${props.id}`);
-          }}
-        >
-          <FontAwesomeIcon
-            id="back"
-            icon={faArrowLeftLong}
-            color="rgb(60, 7, 60)"
-            size="2x"
-          />
-        </div>
-        {isLoading ? (
-          <div></div>
-        ) : save ? (
-          <div></div>
-        ) : (
-          <div id="save-btn" onClick={saveEdit}>
-            <BigBtn text="save" bcolor="rgb(60, 7, 60)" color="white" />
+    <div className="w-full pb-20">
+      <PageHeader
+        previousPath={window.location.pathname?.split("/edit")[0]}
+        cta={
+          <button
+            className="standard-btn-1 w-[250px]"
+            onClick={formik.resetForm}
+          >
+            <RefreshIcon fill="white" />
+            Reset
+          </button>
+        }
+      />
+
+      <div className="register-school">
+        <h1 className="register-school__heading">Edit student</h1>
+        <form className="register-student__form" onSubmit={formik.handleSubmit}>
+          {/* First name input */}
+          <div className="w-full flex flex-col gap-6 lg:flex-row items-center">
+            <div
+              className={`w-full lg:w-[47.5%] ${
+                formik.errors.lastName && !formik.errors.firstName && "mb-7"
+              }`}
+            >
+              <InputText
+                value={formik.values.firstName}
+                setValue={formik.handleChange}
+                id={"firstName"}
+                name={"firstName"}
+                label={"First name"}
+                onChange={formik.handleChange}
+                placeholder={"First Name"}
+                isInvalid={formik.errors.firstName}
+                className={"w-full flex-grow"}
+                inputClassName={"w-full"}
+                errorText={formik.errors?.firstName}
+              />
+            </div>
+
+            {/* Last name input */}
+            <div
+              className={`w-full lg:w-[47.5%] ${
+                formik.errors.firstName && !formik.errors.lastName && "mb-7"
+              }`}
+            >
+              <InputText
+                value={formik.values.lastName}
+                setValue={formik.handleChange}
+                id={"lastName"}
+                name={"lastName"}
+                label={"Last name"}
+                onChange={formik.handleChange}
+                placeholder={"Last Name"}
+                isInvalid={formik.errors.lastName}
+                className={"w-full flex-grow"}
+                inputClassName={"w-full"}
+                errorText={formik.errors?.lastName}
+              />
+            </div>
           </div>
-        )}
-      </div>
-      <div id="info-page">
-        <div id="center">
-          {save ? (
-            <h3 id="edit-title">Confirm changes</h3>
-          ) : (
-            <h3 id="edit-title">Edit student</h3>
-          )}
-          <div id="login-signup-msg">
-            <h5 id="err-msg"></h5>
+
+          {/* Age input */}
+          <div className="w-full flex flex-col gap-6 lg:flex-row items-center">
+            <div
+              className={`w-full lg:w-[47.5%] ${
+                formik.errors.sex && !formik.errors.age && "mb-7"
+              }`}
+            >
+              <InputText
+                value={formik.values.age}
+                setValue={formik.handleChange}
+                id={"age"}
+                name={"age"}
+                label={"Age"}
+                onChange={formik.handleChange}
+                placeholder={"Age"}
+                isInvalid={formik.errors.age}
+                className={"w-full flex-grow"}
+                inputClassName={"w-full"}
+                errorText={formik.errors?.age}
+                inputType={"number"}
+              />
+            </div>
+
+            <div
+              className={`w-full lg:w-[47.5%] ${
+                formik.errors.age && !formik.errors.sex && "mb-7"
+              }`}
+            >
+              <Dropdown
+                dropdownOpen={sexDropdownOpen}
+                setDropDownOpen={setSexDropdownOpen}
+                options={["Male", "Female"]}
+                value={formik.values.sex}
+                onClickFunction={(value) => {
+                  formik.setFieldValue("sex", value);
+                }}
+                label={"Sex"}
+                isInvalid={formik.errors.sex}
+                errorText={formik.errors?.sex}
+              />
+            </div>
           </div>
-        </div>
-        {isLoading ? (
-          <Loader loadingText={"Loading..."} />
-        ) : save ? (
-          saveForm
-        ) : (
-          <div id="form-info">{editForm}</div>
-        )}
+
+          {/* Classroom input */}
+          <div className={`w-full`}>
+            <Dropdown
+              dropdownOpen={clsDropdownOpen}
+              setDropDownOpen={setClsDropdownOpen}
+              options={classrooms}
+              value={formik.values.classroom}
+              onClickFunction={(value) => {
+                formik.setFieldValue("classroom", value);
+              }}
+              label={"Classroom"}
+              isInvalid={formik.errors.classroom}
+              errorText={formik.errors?.classroom}
+            />
+          </div>
+
+          {/* Phone Number input */}
+          <div className="w-full">
+            <InputText
+              value={formik.values.phoneNo}
+              setValue={formik.handleChange}
+              id={"phoneNo"}
+              name={"phoneNo"}
+              label={"Phone number"}
+              onChange={formik.handleChange}
+              placeholder={"Phone"}
+              isInvalid={formik.errors.phoneNo}
+              className={"w-full flex-grow"}
+              inputClassName={"w-full"}
+              errorText={formik.errors?.phoneNo}
+            />
+          </div>
+
+          {/* Applied Discount input */}
+          <div className="w-full">
+            <InputText
+              value={formik.values.discount}
+              setValue={formik.handleChange}
+              id={"discount"}
+              name={"discount"}
+              label={"Applied discount"}
+              onChange={formik.handleChange}
+              placeholder={"Discount"}
+              isInvalid={formik.errors.discount}
+              className={"w-full flex-grow"}
+              inputClassName={"w-full"}
+              errorText={formik.errors?.discount}
+              inputType={"number"}
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="standard-btn-1 w-full"
+          >
+            {isLoading ? "Editing..." : "Edit student"}
+          </button>
+
+          {/* Password for authentication */}
+          <ReactModal
+            isOpen={editModalOpen}
+            onRequestClose={() => setEditModalOpen(false)}
+            style={customStyles}
+            ariaHideApp={false}
+            shouldCloseOnOverlayClick={true}
+            contentLabel="Create school Modal"
+            className="absolute bg-white"
+          >
+            <form className="delete-modal" onSubmit={finalForm.handleSubmit}>
+              <div className="self-center">
+                <p className="text-sm">Please enter Admin password.</p>
+              </div>
+              <div className="w-full">
+                <InputText
+                  value={finalForm.values.password}
+                  setValue={finalForm.handleChange}
+                  id={"password"}
+                  name={"password"}
+                  label={"Enter password"}
+                  onChange={finalForm.handleChange}
+                  placeholder={"Password"}
+                  isInvalid={finalForm.errors.password}
+                  className={"w-full"}
+                  inputClassName={"w-full"}
+                  errorText={finalForm.errors?.password}
+                />
+                <button
+                  type="submit"
+                  className="standard-btn-1 w-full mt-5"
+                  disabled={isLoading}
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </ReactModal>
+        </form>
       </div>
     </div>
   );

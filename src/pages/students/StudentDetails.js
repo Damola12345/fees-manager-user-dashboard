@@ -22,7 +22,7 @@ const StudentDetails = (props) => {
     <StickyHeader>
       <div
         onClick={() => {
-          navigate("/make-payment");
+          navigate("/payments/create");
         }}
       >
         <BigBtn text="Make Payment" bcolor={midPurple} grid color="white" />

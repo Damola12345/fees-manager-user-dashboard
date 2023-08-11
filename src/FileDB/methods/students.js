@@ -3,6 +3,7 @@
 import uuid from "react-uuid";
 import {
   deleteLocalStorageItem,
+  editLocalStorageItem,
   getLocalStorageItem,
   setLocalStorageItems,
 } from "../../utils/index.";
@@ -78,8 +79,12 @@ class StudentMethods {
     }
   }
 
-  async edit() {
+  async edit(filter, data) {
     // Function to edit student
+    return editLocalStorageItem("students", filter, {
+      ...data,
+      updatedAt: new Date(),
+    });
   }
 
   async delete(filter) {

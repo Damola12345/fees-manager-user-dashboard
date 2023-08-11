@@ -2,9 +2,9 @@ import { useParams } from "react-router-dom";
 import AllClassroomsPage from "../classrooms/ClassroomsPage";
 import CreatePaymentPage from "../payments/CreatePaymentPage";
 import DetailView from "../../layouts/details/DetailView";
-import EditClassroom from "../classrooms/editClassroom";
-import EditSchool from "../schools/editSchool";
-import EditStudent from "../students/editStudent";
+import EditClassroom from "../classrooms/EditClassroom";
+import EditSchool from "../schools/EditSchool";
+import EditStudent from "../students/EditStudent";
 import LoginPage from "../auth/LoginPage";
 import PaymentsPage from "../payments/PaymentsPage";
 import ProfilePage from "../ProfilePage/ProfilePage";
@@ -147,6 +147,7 @@ export const RegisterClassroom = () => {
 };
 
 export const ViewSchool = () => {
+  document.title = "Fees Manager | View school";
   const schoolId = window.location.pathname.split("/")[2];
   let queryObj = { resource: "schools", filter: schoolId };
   document.title = "Fees Manager | View school";
@@ -161,10 +162,10 @@ export const ViewSchool = () => {
 export const ViewClassroom = () => {
   //Use the student id to query the api
   document.title = "Fees Manager | View classroom";
-  const { className } = useParams();
+  const clsId = window.location.pathname.split("/")[2];
   let queryObj = {
     resource: "classrooms",
-    filter: className.replace(" ", "_"),
+    filter: clsId,
   };
 
   return (
@@ -201,34 +202,31 @@ export const ViewPayment = (props) => {
 };
 
 export const EditSchoolData = () => {
-  const schoolName = localStorage.currentSchool;
   document.title = "Fees Manager | Edit school";
 
   return (
-    <div>
-      <EditSchool id={schoolName} view="school" />
-    </div>
+    <DashboardLayout>
+      <EditSchool />
+    </DashboardLayout>
   );
 };
 
 export const EditClassroomData = () => {
-  const { className } = useParams();
   document.title = "Fees Manager | Edit classroom";
 
   return (
-    <div>
-      <EditClassroom id={className} view="classroom" />
-    </div>
+    <DashboardLayout>
+      <EditClassroom />
+    </DashboardLayout>
   );
 };
 
 export const EditStudentData = () => {
-  const { studentId } = useParams();
   document.title = "Fees Manager | Edit student";
 
   return (
-    <div>
-      <EditStudent id={studentId} view="student" />
-    </div>
+    <DashboardLayout>
+      <EditStudent />
+    </DashboardLayout>
   );
 };
