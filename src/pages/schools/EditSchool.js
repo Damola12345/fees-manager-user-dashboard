@@ -179,7 +179,7 @@ const EditSchool = () => {
             disabled={isLoading}
             className="standard-btn-1 w-full"
           >
-            {isLoading ? "Edit..." : "Edit School"}
+            {isLoading ? "Editing..." : "Edit School"}
           </button>
 
           {/* Password for authentication */}

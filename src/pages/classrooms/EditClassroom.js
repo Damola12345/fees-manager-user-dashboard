@@ -14,12 +14,12 @@ import { config } from "../../app.config";
 
 const DATABASE = process.env.REACT_APP_DATABASE;
 
-const EditClassroom = (props) => {
+const EditClassroom = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [clsDropdownOpen, setClsDropdownOpen] = useState(false);
-  const { currentSchool, setCurrentSchool, setReload } = useDashboard();
+  const { currentSchool } = useDashboard();
   const [classroom, setClassroom] = useState({});
 
   // Styles for modal
@@ -215,7 +215,7 @@ const EditClassroom = (props) => {
             disabled={isLoading}
             className="standard-btn-1 w-full"
           >
-            {isLoading ? "Edit..." : "Edit classroom"}
+            {isLoading ? "Editing..." : "Edit classroom"}
           </button>
 
           <ReactModal

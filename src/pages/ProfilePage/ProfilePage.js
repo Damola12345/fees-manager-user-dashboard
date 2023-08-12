@@ -1,309 +1,264 @@
-import './ProfilePage.css';
-import { alertMessage } from "../../GlobalFunctions/GlobalFunctions";
-import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Loader } from '../../components/Loader/Loader';
-import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import BigBtn from '../../components/BigBtn/BigBtn';
-//const sha1 = require('sha1');
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import PageHeader from "../../components/pageHeader/PageHeader";
+import { ReactComponent as RefreshIcon } from "../../assets/svg/refresh.svg";
+import { useAuth } from "../../contexts/AuthContext";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import InputText from "../../components/inputText/InputText";
+import ReactModal from "react-modal";
+import { alertSuccess } from "../../utils/index.";
+import FileDB from "../../FileDB/methods/DBMethods";
 
-const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
+const DATABASE = process.env.REACT_APP_DATABASE;
 
 const ProfilePage = () => {
-	const navigate = useNavigate();
-	const [isLoading, setIsLoading] = useState(true);
-	//const [classrooms, setClassrooms] = useState([]);
-	const [user] = useState(JSON.parse(localStorage.user));
-	const [firstname, setFirstname] = useState('');
-	const [lastname, setLastname] = useState('');
-	const [phone, setPhone] = useState('');
-	//const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
-	const [save, setSave] = useState(false);
-	const [oldPwd, setOldPwd] = useState('');
-	const [newPwd, setNewPwd] = useState('');
-	const [samePwd, setSamePwd] = useState('');
-	const [pwdSave, setPwdSave] = useState(false);
-	const [info, setInfo] = useState({});
-	let editForm;
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const { user, setRefreshUser } = useAuth();
 
-	useEffect(() => {
-		setFirstname(user.firstname);
-		setLastname(user.lastname);
-		setPhone(user.phone);
-		//setEmail(user.email);
-	},[]);
+  // Styles for modal
+  const customStyles = {
+    overlay: {
+      position: "fixed",
+      top: 0,
+      right: 0,
+      bottom: 0,
+      opacity: "1",
+      backgroundColor: "#00000087",
+      zIndex: 99999999999,
+    },
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      borderRadius: "8px",
+    },
+  };
 
-	useEffect(() => {
-		if (!isLoading) {
-			const p1 = document.getElementById("input-new-pwd");
-			const p2 = document.getElementById("input-same-pwd");
-			const errMsg = document.getElementById('err');
-			(samePwd && newPwd) && (samePwd === newPwd) && p2 ? p2.style.borderColor = 'green' : p2.style.borderColor = 'red';
-			!samePwd && p2 ? p2.style.borderColor = 'gray' : console.log();
-			(oldPwd && newPwd) && (oldPwd === newPwd) && p1 ? p1.style.borderColor = 'red' : p1.style.borderColor = 'gray';
-			(oldPwd && newPwd) && (oldPwd === newPwd) && errMsg ? errMsg.innerText = 'Old and new password can\'t be the same!' : errMsg.innerText = '';
-			(oldPwd && newPwd) && (oldPwd === newPwd) && errMsg ? errMsg.style.display = 'block' : errMsg.style.display = 'none';
-		}
-		setTimeout(() => {
-			setIsLoading(false)
-		}, 1000);
-	}, [samePwd, newPwd, oldPwd])
+  const formik = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      firstName: user?.firstname,
+      lastName: user?.lastname,
+      email: user?.email,
+      phone: user?.phone,
+      id: user?._id,
+    },
+    validationSchema: Yup.object({
+      firstName: Yup.string()
+        .required("First name is required")
+        .min(3, "Minimum of 3 characters")
+        .max(20, "Maximum of 20 characters"),
+      lastName: Yup.string()
+        .required("Last name is required")
+        .min(3, "Minimum of 3 characters")
+        .max(20, "Maximum of 20 characters"),
+      phone: Yup.string()
+        .required("Phone number is required")
+        .min(10, "Minimum of 10 characters")
+        .max(16, "Maximum of 16 characters"),
+    }),
+    onSubmit: async (values) => {
+      let changed = false;
+      Object.keys(values).map((key) => {
+        if (values[key] !== formik.initialValues[key]) {
+          changed = true;
+        }
+      });
+      changed && setEditModalOpen(true);
+    },
+  });
 
-	editForm =
-		<div>
-			<div id='input-pair'>
-				<h4 className='input-txt' >Fullname:</h4>
-				<div className='edit-input'>
-					<input type={'text'} defaultValue={user.firstname} name='Firstname' onChange={(event) => {setFirstname(event.target.value); alertMessage()}}></input>
-				</div>
-				<div className='edit-input'>
-					<input type='text' defaultValue={user.lastname} name='Lastname' onChange={(event) => {setLastname(event.target.value); alertMessage()}}></input>
-				</div>
-			</div>
-			<div id='input-single'>
-				<h4 className='input-txt'>Phone:</h4>
-				<div className='edit-input'>
-					<input id='input-phone' type='text' defaultValue={user.phone} name='phone' onChange={(event) => {setPhone(event.target.value); alertMessage()}}></input>
-				</div>
-			</div>
-			<div id='input-single'>
-				<h4 className='input-txt'>Email:</h4>
-				<div className='edit-input'>
-					<input id='input-phone' className='immutable' type='text' defaultValue={user.email} name='phone' readOnly ></input>
-				</div>
-			</div>
-			<div id='input-single' >
-				<h4 className='input-txt' >user ID:</h4>
-				<div className='edit-input'>
-					<input id='input-id' className='immutable' type='text' value={user._id} name='id' readOnly ></input>
-				</div>
-			</div>
-			<div id='input-single'>
-				<h4 className='input-txt'>Password:</h4>
-				<button className='change-pwd-btn' onClick={() => {
-					alertMessage();
-					setPwdSave(true);
-					setSave(true);
-				}}>
-					Change password
-				</button>
-			</div>
-		</div>
+  const finalForm = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      password: "",
+    },
+    validationSchema: Yup.object({
+      password: Yup.string().required("Password is required."),
+    }),
+    onSubmit: async () => {
+      setEditModalOpen(false);
+      editProfile();
+    },
+  });
 
-	const saveEdit = () => {
-		if (user.firstname !== firstname) info.firstname = firstname;
-		if (user.lastname !== lastname) info.lastname = lastname;
-		if (user.phone !== phone) info.phone = phone;
-		
-		if (Object.keys(info).length > 0) {
-			alertMessage();
-			setSave(true);
-		} else {
-			alertMessage('No changes made. your profile is up to date!', 'block', 'green');
-		}
-	}
+  const editProfile = async () => {
+    if (DATABASE === "LOCAL_STORAGE") {
+      setIsLoading(true);
+      const response = await FileDB.put(
+        "users",
+        { _id: user?._id },
+        {
+          firstname: formik.values.firstName,
+          lastname: formik.values.lastName,
+          phone: formik.values.phone,
+        }
+      );
+      setRefreshUser(true);
+      setIsLoading(false);
+      alertSuccess("Profile updated successfully!");
+    }
+  };
 
-	const cancelSave = () => {
-		setSave(false);
-		alertMessage();
-		setInfo({});
-		setFirstname(user.firstname);
-		setLastname(user.lastname);
-		setPhone(user.phone);
-		//setEmail(user.email);
-	}
+  return (
+    <div className="pb-20">
+      <PageHeader
+        previousPath={-1}
+        cta={
+          <button
+            className="standard-btn-1 w-[250px]"
+            onClick={formik.resetForm}
+          >
+            <RefreshIcon fill="white" />
+            Reset
+          </button>
+        }
+      />
+      <div className="w-full min-h-[65vh] bg-white rounded-md mt-10">
+        <div className="register-school">
+          <h1 className="register-school__heading">Your profile</h1>
+          <form
+            onSubmit={formik.handleSubmit}
+            className="register-school__form"
+          >
+            <div className="w-full flex items-start justify-between">
+              <div className="w-[48%]">
+                <InputText
+                  value={formik.values.email}
+                  setValue={formik.handleChange}
+                  id={"email"}
+                  name={"email"}
+                  label={"Email"}
+                  onChange={formik.handleChange}
+                  placeholder={"Email"}
+                  isInvalid={formik.errors.email}
+                  className={"w-full"}
+                  inputClassName={"w-full"}
+                  errorText={formik.errors?.email}
+                  readOnly={true}
+                />
+              </div>
+              <div className="w-[48%]">
+                <InputText
+                  value={formik.values.id}
+                  setValue={formik.handleChange}
+                  id={"id"}
+                  name={"id"}
+                  label={"User ID"}
+                  onChange={formik.handleChange}
+                  placeholder={"Password"}
+                  isInvalid={formik.errors.id}
+                  className={"w-full"}
+                  inputClassName={"w-full"}
+                  errorText={formik.errors?.id}
+                  readOnly={true}
+                />
+              </div>
+            </div>
+            <div className="w-full flex items-start justify-between">
+              <div className={"w-[48%]"}>
+                <InputText
+                  value={formik.values.firstName}
+                  setValue={formik.handleChange}
+                  id={"firstName"}
+                  name={"firstName"}
+                  label={"First name"}
+                  onChange={formik.handleChange}
+                  placeholder={"First name"}
+                  isInvalid={formik.errors.firstName}
+                  className={"w-full"}
+                  inputClassName={"w-full"}
+                  errorText={formik.errors?.firstName}
+                />
+              </div>
+              <div className="w-[48%]">
+                <InputText
+                  value={formik.values.lastName}
+                  setValue={formik.handleChange}
+                  id={"lastName"}
+                  name={"lastName"}
+                  label={"Last name"}
+                  onChange={formik.handleChange}
+                  placeholder={"Last name"}
+                  isInvalid={formik.errors.lastName}
+                  className={"w-full"}
+                  inputClassName={"w-full"}
+                  errorText={formik.errors?.lastName}
+                />
+              </div>
+            </div>
+            <div className="w-full">
+              <InputText
+                value={formik.values.phone}
+                setValue={formik.handleChange}
+                id={"phone"}
+                name={"phone"}
+                label={"Phone number"}
+                onChange={formik.handleChange}
+                placeholder={"+234..."}
+                isInvalid={formik.errors.phone}
+                className={"w-full"}
+                inputClassName={"w-full"}
+                errorText={formik.errors?.phone}
+              />
+            </div>
 
-	const editUser = (event, editPassword=false) => {
-		let move = false;
-		if (editPassword) {
-			if (samePwd != newPwd) {
-				alertMessage('Passwords don\'t match', 'block', 'red');
-				move = false;
-			} else {
-				info.oldPwd = oldPwd;
-				info.newPwd = newPwd;
-				move = true;
-			}
-		} else {
-			info.password = password;
-			move = true;
-		}
-		
-		if (move) {
-			setIsLoading(true);
-			fetch(`${BACKEND_HOST}/users/${user._id}/edit`, {
-				method: "PUT",
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				credentials: "include",
-				body: JSON.stringify(info),
-			})
-			.then((response) => {
-				if (response.ok) { 
-					response.json().then((data) => {
-						setTimeout(() => {
-							if (!editPassword) {
-								localStorage.setItem('user', JSON.stringify(data.success));
-							}
-							setIsLoading(false);
-							setSave(false);
-							alertMessage('Your profile has been updated successfully!', 'block', 'green');
-						}, 1000)
-					});
-				} else if(response.status === 401) {
-					navigate('/login');
-				} else {
-					response.json().then((message) => {
-						setIsLoading(false);
-						setOldPwd('');
-						setNewPwd('');
-						setSamePwd('');
-						alertMessage(message.error, 'block', 'red');
-					})
-				}
-			})
-			.catch((err) => {
-				setIsLoading(false);
-				setSave(false)
-				cancelSave();
-				alertMessage('An error occured. Please retry', 'block', 'red');
-				console.log(err.message)
-			});
-		}
-	}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="standard-btn-1 w-full"
+            >
+              {isLoading ? "Editing..." : "Edit Profile"}
+            </button>
 
-	const editUserPassword = (event) => {
-		event.preventDefault();
-		editUser(event, true);
-	}
-
-	const saveForm = 
-		<form id='save-form' onSubmit={editUser}>
-			<div id="input-single">
-				<input className='immutable' value={lastname} readOnly></input>
-			</div>
-			<div id="input-single">
-				<input className='immutable' value={firstname} readOnly></input>
-			</div>
-			<div id="input-single">
-				<input className='immutable' value={`${phone}`} readOnly></input>
-			</div>
-			<div id="input-single">
-				<input placeholder='Password' type={'password'} required onChange={(event) => setPassword(event.target.value)}></input>
-			</div>
-			<div id='final-buttons'>
-				<button className='checkout-btns' onClick={() => cancelSave()}>Cancel</button>
-				<button type='submit' className='checkout-btns' id='confirm-btn'>Confirm</button>
-			</div>
-		</form>
-
-	const changePwd =
-		<form id='save-pwd' onSubmit={(event) => editUserPassword(event)}>
-			<div id='input-single'>
-				<h4 className='input-txt-2'>Old password:</h4>
-				<div className='edit-input'>
-					<input id='input-old-pwd' type='password' name='old-pwd' onChange={(event) => {setOldPwd(event.target.value); alertMessage()}} required></input>
-				</div>
-			</div>
-			<div id='input-single'>
-				<h4 className='input-txt-2'>New password:</h4>
-				<div className='edit-input'>
-					<input id='input-new-pwd' type='password' name='new-pwd' onChange={(event) => {setNewPwd(event.target.value); alertMessage()}} required></input>
-				</div>
-			</div>
-			<div id='input-single' >
-				<h4 className='input-txt-2' >Confirm password:</h4>
-				<div className='edit-input'>
-					<input id='input-same-pwd' type='password' name='same-pwd' onChange={(event) => {setSamePwd(event.target.value); alertMessage()}} required></input>
-				</div>
-			</div>
-			<div id='final-buttons'>
-				<button className='checkout-btns' onClick={() => {
-					setSave(false);
-					setPwdSave(false);
-					setOldPwd('');
-					setNewPwd('');
-					setSamePwd('');
-				}}>
-					Cancel
-				</button>
-				<button type='submit' className='checkout-btns' id='confirm-btn'>Confirm</button>
-			</div>
-		</form>
-
-	return (
-		<div id='profile-con'>
-			<div id='nav-btns' >
-				<div id='return' onClick={() => {
-					navigate(-1);
-				}}>
-					<FontAwesomeIcon id='back' icon={faArrowLeftLong} color='rgb(60, 7, 60)' size='2x' />
-				</div>
-					{
-						isLoading
-						?
-						<div></div>
-						:
-						save
-						?
-						<div></div>
-						:
-						<div id='save-btn' onClick={saveEdit}>
-						<BigBtn text='save' bcolor='rgb(60, 7, 60)' color='white' />
-						</div>
-					}
-				</div>
-				<div id='info-page'>
-					<div id="login-signup-msg">
-						<h5 id="err-msg"></h5>
-					</div>
-				<div >
-					{
-						save
-						?
-						<div id='profile-title'>
-							{
-								pwdSave
-								?
-								<h3>Change password</h3>
-								:
-								<h3>Confirm changes</h3>
-							}
-							<h5 id='err'></h5>
-						</div>
-						:
-						<div id='pic-and-title'>
-							<div id='upload-and-pic'>
-								<img id='profile-pic' src='https://drive.google.com/uc?export=view&id=1gGHVqJMTHHr0WUslAde0RVDnUpkTUCS-' />
-								<input type="file" text='upload' id="input-pic" name="pic" accept="image/*"></input>
-							</div>
-							<h3 id='profile-title'>Your profile</h3>
-						</div>
-					}
-				</div>
-				{
-					isLoading
-					?
-					<Loader loadingText={'Loading...'} />
-					:
-					save && pwdSave
-					?
-					changePwd
-					:
-					save
-					?
-					saveForm
-					:
-					<div id='form-info'>
-						{editForm}
-					</div>
-				}
-			</div>
-		</div>
-	)
-}
+            <ReactModal
+              isOpen={editModalOpen}
+              onRequestClose={() => setEditModalOpen(false)}
+              style={customStyles}
+              ariaHideApp={false}
+              shouldCloseOnOverlayClick={true}
+              contentLabel="Create school Modal"
+              className="absolute bg-white"
+            >
+              <form className="delete-modal" onSubmit={finalForm.handleSubmit}>
+                <div className="self-center">
+                  <p className="text-sm">Please enter Admin password.</p>
+                </div>
+                <div className="w-full">
+                  <InputText
+                    value={finalForm.values.password}
+                    setValue={finalForm.handleChange}
+                    id={"password"}
+                    name={"password"}
+                    label={"Enter password"}
+                    onChange={finalForm.handleChange}
+                    placeholder={"Password"}
+                    isInvalid={finalForm.errors.password}
+                    className={"w-full"}
+                    inputClassName={"w-full"}
+                    errorText={finalForm.errors?.password}
+                  />
+                  <button
+                    type="submit"
+                    className="standard-btn-1 w-full mt-5"
+                    disabled={isLoading}
+                  >
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </ReactModal>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default ProfilePage;
