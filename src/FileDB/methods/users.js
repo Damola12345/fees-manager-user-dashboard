@@ -2,6 +2,7 @@
 
 import { v4 as uuid } from "uuid";
 import raw from "../database/users.txt";
+import { editLocalStorageItem } from "../../utils/index.";
 
 class UserMethods {
   async get(filter = {}) {
@@ -24,6 +25,14 @@ class UserMethods {
         });
       });
     return keys.length > 0 ? results : users;
+  }
+
+  async edit(filter, data) {
+    // Function to edit student
+    return editLocalStorageItem("users", filter, {
+      ...data,
+      updatedAt: new Date(),
+    });
   }
 
   /* async create(data) {

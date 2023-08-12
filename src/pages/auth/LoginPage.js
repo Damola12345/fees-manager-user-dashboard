@@ -59,19 +59,26 @@ const LoginPage = () => {
     if (DATABASE === "LOCAL_STORAGE") {
       setModalIsOpen(false);
       setIsLoading(true);
-      const user = await FileDB.get("users", { email: "guest.user@test.me" });
+      const users = await FileDB.get("users");
       const schools = await FileDB.get("schools", null, "file");
       const classrooms = await FileDB.get("classrooms", null, "file");
       const students = await FileDB.get("students", null, "file");
       const payments = await FileDB.get("payments", null, "file");
 
-      setLocalStorageItems("user", user[0]);
+      setLocalStorageItems("users", users);
       setLocalStorageItems("schools", schools);
       setLocalStorageItems("classrooms", classrooms);
       setLocalStorageItems("students", students);
       setLocalStorageItems("payments", payments);
       setLocalStorageItems("currentSchool", "");
-      setUser(user[0]);
+
+      const guestUser = users?.filter((usr) => {
+        return usr?.email === "guest.user@test.me";
+      });
+
+      setUser(guestUser[0]);
+      setLocalStorageItems("user", guestUser[0]);
+
       new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve(navigate("/"));

@@ -68,9 +68,9 @@ export const ResetPassword = () => {
 export const UserProfile = () => {
   document.title = "Fees Manager | Profile";
   return (
-    <div className="">
+    <DashboardLayout>
       <ProfilePage />
-    </div>
+    </DashboardLayout>
   );
 };
 
