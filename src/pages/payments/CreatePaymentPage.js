@@ -25,7 +25,7 @@ const CreatePaymentPage = () => {
   const [stuDropdownOpen, setStuDropdownOpen] = useState(false);
   const [btnFocus, setBtnFocus] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const { currentSchool } = useDashboard();
+  const { currentSchool, reload, setReload } = useDashboard();
 
   // Styles for modal
   const customStyles = {
@@ -133,6 +133,45 @@ const CreatePaymentPage = () => {
       setModalOpen(false);
       const response = await FileDB.post("payments", paymentObj);
       if (response === "ok") {
+        const studentObj = students?.filter((stu) => {
+          return stu._id === paymentObj.studentId;
+        });
+        const currentBalance = studentObj[0].totalPaidFees;
+        // Add payment to student
+        await FileDB.put(
+          "students",
+          {
+            _id: paymentObj.studentId,
+          },
+          { totalPaidFees: paymentObj.amount + currentBalance }
+        );
+
+        // Add payment to classroom
+        const studentClass = await FileDB.get(
+          "classrooms",
+          { name: studentObj[0].classroom },
+          "browser"
+        );
+        const classBalance = studentClass[0].totalFees;
+        await FileDB.put(
+          "classrooms",
+          {
+            name: studentClass[0].name,
+          },
+          { totalFees: paymentObj.amount + classBalance }
+        );
+
+        // Add payment to school
+        const schoolBalance = currentSchool.totalFees;
+        await FileDB.put(
+          "schools",
+          {
+            _id: currentSchool._id,
+          },
+          { totalFees: paymentObj.amount + schoolBalance }
+        );
+
+        setReload({ ...reload, schools: true });
         ResetPayment();
         setIsLoading(false);
         alertSuccess("Payment successfull!");
@@ -430,6 +469,7 @@ const CreatePaymentPage = () => {
                 onClick={(e) => {
                   e.preventDefault();
                   setIsLoading(true);
+                  setModalOpen(false);
                 }}
                 className="standard-btn-1 w-[48%]"
               >

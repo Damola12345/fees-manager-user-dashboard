@@ -11,7 +11,7 @@ import { useDashboard } from "../../contexts/DashboardContext";
 
 const StudentDetails = (props) => {
   const data = props.data;
-  const percentage = "40%";
+  //const percentage = "40%";
   //const studentId = props.studentId;
   const navigate = useNavigate();
   const { midPurple } = config.color;
@@ -64,7 +64,9 @@ const StudentDetails = (props) => {
       <InfoTable
         information={options}
         heading={data.fullname}
-        percentage={percentage}
+        percentage={`${Math.floor(
+          data.totalPaidFees / data.totalFeesExpected
+        )} %`}
         view="classroom"
         options={StudentOptions}
       />
