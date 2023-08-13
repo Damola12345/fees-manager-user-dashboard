@@ -35,8 +35,6 @@ class StudentMethods {
     const newStu = {
       _id: uuid(),
       ...data,
-      noOfStudents: 0,
-      totalFeesExpected: 0,
       totalPaidFees: 0,
       createdAt: new Date(),
       updatedAt: new Date(),

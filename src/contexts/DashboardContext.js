@@ -29,6 +29,10 @@ export const DashboardProvider = ({ children }) => {
     setLocalStorageItems("currentSchool", school);
   };
 
+  useEffect(() => {
+    currentSchool && setReload({ ...reload, classrooms: true, students: true });
+  }, [currentSchool]);
+
   useMemo(async () => {
     setIsloading(true);
     if (reload.schools || reload.classrooms || reload.students) {
@@ -44,16 +48,24 @@ export const DashboardProvider = ({ children }) => {
         });
       }
 
-      if (reload.classrooms) {
-        const newClassrooms = await FileDB.get("classrooms", null, "browser");
+      if (reload.classrooms && currentSchool) {
+        const newClassrooms = await FileDB.get(
+          "classrooms",
+          { schoolId: currentSchool?._id },
+          "browser"
+        );
         setClassrooms(newClassrooms);
         clsObjects = newClassrooms.map((cls) => {
           return { name: cls.name, _id: cls._id, path: "classrooms" };
         });
       }
 
-      if (reload.students) {
-        const newStudents = await FileDB.get("students", null, "browser");
+      if (reload.students && currentSchool) {
+        const newStudents = await FileDB.get(
+          "students",
+          { schoolId: currentSchool?._id },
+          "browser"
+        );
         setStudents(newStudents);
         stuObjects = newStudents.map((stu) => {
           return { name: stu.fullname, _id: stu._id, path: "students" };
@@ -69,7 +81,7 @@ export const DashboardProvider = ({ children }) => {
       setReload({ schools: false, classrooms: false, students: false });
       setIsloading(false);
     }
-  }, [reload]);
+  }, [reload, currentSchool]);
 
   useEffect(() => {
     (async () => {

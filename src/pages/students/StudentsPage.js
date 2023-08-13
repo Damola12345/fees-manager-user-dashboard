@@ -9,6 +9,7 @@ import { ReactComponent as PlusIcon } from "../../assets/svg/plus.svg";
 import { ReactComponent as FilterIcon } from "../../assets/svg/filter.svg";
 import { ReactComponent as CaretDown } from "../../assets/svg/caret-down.svg";
 import { useDashboard } from "../../contexts/DashboardContext";
+import { money } from "../../GlobalFunctions/GlobalFunctions";
 
 const DATABASE = process.env.REACT_APP_DATABASE;
 
@@ -327,7 +328,7 @@ const StudentsPage = () => {
                     key={stu._id}
                     one={stu.fullname}
                     two={stu.classroom}
-                    three={stu.totalPaidFees}
+                    three={money(stu.totalPaidFees)}
                     four={stu.discount}
                     five={stu.sex}
                     header={false}

@@ -14,8 +14,14 @@ const Header = () => {
   const [profileDropdown, setProfileDropdown] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const { searchObjects, schools, currentSchool, setCurrentSchool } =
-    useDashboard();
+  const {
+    searchObjects,
+    schools,
+    currentSchool,
+    setCurrentSchool,
+    reload,
+    setReload,
+  } = useDashboard();
   const navigate = useNavigate();
   const { logout } = useAuth();
 
@@ -41,6 +47,12 @@ const Header = () => {
   useEffect(() => {
     !searchText && setTimeout(() => setSearchResults([]), 500);
   }, [searchText]);
+
+  useEffect(() => {
+    schoolDropdown &&
+      schools?.length === 0 &&
+      setReload({ ...reload, schools: true });
+  }, [schoolDropdown]);
 
   return (
     <div className="app-header">

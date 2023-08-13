@@ -20,6 +20,7 @@ const RegisterStudentPage = () => {
   const [sexDropdownOpen, setSexDropdownOpen] = useState(false);
   const [clsDropdownOpen, setClsDropdownOpen] = useState(false);
   const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [classroomObjects, setClassroomObjects] = useState([]);
   const [classrooms, setClassrooms] = useState(null);
 
   // Styles for modal
@@ -45,6 +46,10 @@ const RegisterStudentPage = () => {
   };
 
   const createStudent = async (values) => {
+    const studentCls = classroomObjects.filter((cls) => {
+      return cls.name === values.classroom;
+    });
+
     setIsLoading(true);
     const fullname = `${values.lastName} ${values.firstName}`;
     const age = values.age;
@@ -60,6 +65,7 @@ const RegisterStudentPage = () => {
       discount,
       classroom,
       schoolId: currentSchool?._id,
+      totalFeesExpected: studentCls[0]?.classFees,
     };
 
     if (DATABASE === "LOCAL_STORAGE") {
@@ -80,6 +86,7 @@ const RegisterStudentPage = () => {
       },
       "browser"
     );
+    setClassroomObjects(allClassrooms);
     const clsNames = allClassrooms.map((cls) => {
       return cls?.name;
     });
@@ -100,11 +107,11 @@ const RegisterStudentPage = () => {
     validationSchema: Yup.object({
       firstName: Yup.string()
         .required("Fistname is required")
-        .min(5, "Name must be at least 3 characters")
+        .min(3, "Name must be at least 3 characters")
         .max(100, "Name must not exceed 100 characters"),
       lastName: Yup.string()
         .required("Lastname is required")
-        .min(5, "Name must be at least 3 characters")
+        .min(3, "Name must be at least 3 characters")
         .max(100, "Name must not exceed 100 characters"),
       age: Yup.number().required("Age is required").min(1, "Minimum of 1"),
       sex: Yup.string().required("Sex is required"),
