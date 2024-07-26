@@ -7,9 +7,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -20,23 +32,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build Docker image
-        id: build-image
-        uses: docker/build-push-action@v4.0.0
-        with:
-          context: .
-          push: false  # Don't push yet
-          platforms: linux/amd64
-          tags: damola12345/fees-manager:test
-
-      - name: Verify the image is built
-        run: docker images damola12345/fees-manager:test
-
-      - name: Run tests in Docker container
-        run: docker run --rm damola12345/fees-manager:test npm test
-
-      - name: Push Docker image
-        if: success()
+      - name: Build and push
         uses: docker/build-push-action@v4.0.0
         with:
           context: .
@@ -49,7 +45,6 @@ jobs:
         with:
           command: cves,recommendations,quickview
           only-severities: critical,high
-
 
 
     
