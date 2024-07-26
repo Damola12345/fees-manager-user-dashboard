@@ -6,9 +6,7 @@ on:
 
 jobs:
   build:
-    # The type of runner that the job will run on    
     runs-on: ubuntu-latest
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -31,9 +29,11 @@ jobs:
           platforms: linux/amd64
           tags: damola12345/fees-manager:test
 
+      - name: Verify the image is built
+        run: docker images damola12345/fees-manager:test
+
       - name: Run tests in Docker container
-        run: |
-          docker run --rm damola12345/fees-manager:test npm test
+        run: docker run --rm damola12345/fees-manager:test npm test
 
       - name: Push Docker image
         if: success()
@@ -48,11 +48,8 @@ jobs:
         uses: docker/scout-action@v1
         with:
           command: cves,recommendations,quickview
-          # image: ${{ steps.meta.outputs.tags }}
-          # to: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.COMPARE_TAG }}
-          # ignore-unchanged: true
           only-severities: critical,high
-          # write-comment: true
+
 
 
     
